@@ -169,7 +169,7 @@ def translate(
     util = Utilities(True)
     from hub_utils.meltano_util import MeltanoUtil
 
-    for yaml_file in json.loads(variant_path_list):
+    for yaml_file in variant_path_list.split(","):
         existing_def = util._read_yaml(yaml_file)
         suffix = "/".join(yaml_file.split("/")[-3:])
         json_file = f"{sdk_output_path}/{suffix}".replace(".yml", ".json")
