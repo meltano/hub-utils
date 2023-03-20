@@ -116,7 +116,7 @@ def extract_metadata(
 @app.command()
 def get_variant_names(
     hub_root: str,
-    sdk_based: bool = typer.Option(False),
+    # sdk_based: bool = typer.Option(False),
 ):
     select_subset = [
         "extractors/tap-snowflake/meltanolabs.yml",
@@ -128,7 +128,8 @@ def get_variant_names(
         suffix = yaml_file.replace(f"{hub_root}/_data/meltano/", "")
         if suffix in select_subset:
             files.append(yaml_file)
-    print(json.dumps(files))
+    # print(json.dumps(files))
+    print(",".join(files))
 
 @app.command()
 def extract_metadata_v2(
@@ -137,7 +138,7 @@ def extract_metadata_v2(
 ):
     util = Utilities(True)
     failures = []
-    for yaml_file in json.loads(variant_path_list):
+    for yaml_file in variant_path_list.split(","):
         data = util._read_yaml(yaml_file)
         p_type = util.get_plugin_type(data.get("repo"))
         p_name = data.get("name")
