@@ -120,8 +120,8 @@ def get_variant_names(
 ):
     select_subset = [
         "extractors/tap-snowflake/meltanolabs.yml",
-        "extractors/tap-github/meltanolabs.yml",
-        "extractors/tap-cloudwatch/meltanolabs.yml"
+        # "extractors/tap-github/meltanolabs.yml",
+        # "extractors/tap-cloudwatch/meltanolabs.yml"
     ]
     files = []
     for yaml_file in find_all_yamls(f_path=f"{hub_root}/_data/meltano/"):
