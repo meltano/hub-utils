@@ -18,6 +18,11 @@ class MeltanoUtil:
     @staticmethod
     def add(plugin_name, namespace, executable, pip_url, plugin_type):
         subprocess.run(
+            f'pipx uninstall {plugin_name}'.split(" "),
+            stdout=subprocess.PIPE,
+            universal_newlines=True,
+        )
+        subprocess.run(
             f'pipx install {pip_url}'.split(" "),
             stdout=subprocess.PIPE,
             universal_newlines=True,
