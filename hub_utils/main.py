@@ -127,6 +127,8 @@ def get_variant_names(
         "extractors/tap-snowflake/meltanolabs.yml",
     ]
     files = []
+    print("starting")
+    print("YAML" + str(find_all_yamls(f_path=f"{hub_root}/_data/meltano/")))
     for yaml_file in find_all_yamls(f_path=f"{hub_root}/_data/meltano/"):
         suffix = yaml_file.replace(f"{hub_root}/_data/meltano/", "")
         print(f"{yaml_file} -- {suffix}")
