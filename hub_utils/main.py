@@ -121,20 +121,11 @@ def extract_metadata(
 @app.command()
 def get_variant_names(
     hub_root: str,
-    # sdk_based: bool = typer.Option(False),
 ):
-    select_subset = [
-        "extractors/tap-cloudwatch/meltanolabs.yml",
-    ]
     files = []
-    # print("starting")
-    # print("YAML" + str(find_all_yamls(f_path=f"{hub_root}/_data/meltano/")))
     for yaml_file in find_all_yamls(f_path=f"{hub_root}/_data/meltano/"):
-        suffix = yaml_file.replace(f"{hub_root}/_data/meltano/", "")
-        # print(f"{yaml_file} -- {suffix}")
-        if suffix in select_subset:
-            files.append(yaml_file)
-    formatted_output = [{"source-name": "/".join(file.split("/")[-3:])} for file in files]
+        files.append("/".join(yaml_file.split("/")[-3:]))
+    formatted_output = [{"source-name": suffix} for suffix in files]
     print(json.dumps(formatted_output).replace('\"', '\\"'))
 
 @app.command()
