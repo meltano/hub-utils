@@ -135,8 +135,7 @@ def get_variant_names(
         if suffix in select_subset:
             files.append(yaml_file)
     formatted_output = [{"source-name": "/".join(file.split("/")[-3:])} for file in files]
-    print(json.dumps(formatted_output))
-    # .replace("\"", "/\""))
+    print(json.dumps(formatted_output).replace('\"', '\\"'))
 
 @app.command()
 def extract_metadata_v2(
