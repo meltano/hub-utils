@@ -129,6 +129,7 @@ def get_variant_names(
     files = []
     for yaml_file in find_all_yamls(f_path=f"{hub_root}/_data/meltano/"):
         suffix = yaml_file.replace(f"{hub_root}/_data/meltano/", "")
+        print(f"{yaml_file} -- {suffix}")
         if suffix in select_subset:
             files.append(yaml_file)
     formatted_output = [{"source-name": "/".join(file.split("/")[-3:])} for file in files]
