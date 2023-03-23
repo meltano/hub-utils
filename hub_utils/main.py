@@ -126,18 +126,25 @@ def get_variant_names(
     # comma separated list
     plugin_type: str = None,
 ):
-    files = []
+    formatted_output = []
     util = Utilities(True)
     for yaml_file in find_all_yamls(f_path=f"{hub_root}/_data/meltano/"):
         data = util._read_yaml(yaml_file)
-        if metadata_type == "sdk" and "meltano_sdk" not in data.get("keywords", []):
-            continue
-        if metadata_type == "airbyte" and "airbyte_protocol" not in data.get("keywords", []):
-            continue
         if plugin_type and yaml_file.split("/")[-3] not in plugin_type.split(","):
             continue
-        files.append("/".join(yaml_file.split("/")[-3:]))
-    formatted_output = [{"source-name": suffix} for suffix in files]
+
+        if metadata_type == "sdk":
+            if "meltano_sdk" not in data.get("keywords", []):
+                continue
+            suffix = "/".join(yaml_file.split("/")[-3:])
+            formatted_output.append({"plugin-name":suffix})
+
+        if metadata_type == "airbyte":
+            if "airbyte_protocol" not in data.get("keywords", []):
+                continue
+            suffix = "/".join(yaml_file.split("/")[-3:])
+            image_name = [setting.get("value") for setting in data.get("settings") if setting.get("name") == "airbyte_spec.image"][0]
+            formatted_output.append({"plugin-name": suffix, "image-name": image_name})
     print(json.dumps(formatted_output).replace('\"', '\\"'))
 
 @app.command()
