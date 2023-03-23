@@ -122,16 +122,19 @@ def extract_metadata(
 @app.command()
 def get_variant_names(
     hub_root: str,
-    sdk_based: bool = typer.Option(True),
-    plugin_type: str = typer.Option("extractors"),
+    metadata_type: str = typer.Option("sdk"),
+    # comma separated list
+    plugin_type: str = None,
 ):
     files = []
     util = Utilities(True)
     for yaml_file in find_all_yamls(f_path=f"{hub_root}/_data/meltano/"):
         data = util._read_yaml(yaml_file)
-        if sdk_based and "meltano_sdk" not in data.get("keywords", []):
+        if metadata_type == "sdk" and "meltano_sdk" not in data.get("keywords", []):
             continue
-        if plugin_type and yaml_file.split("/")[-3] != plugin_type:
+        if metadata_type == "airbyte" and "airbyte_protocol" not in data.get("keywords", []):
+            continue
+        if plugin_type and yaml_file.split("/")[-3] not in plugin_type.split(","):
             continue
         files.append("/".join(yaml_file.split("/")[-3:]))
     formatted_output = [{"source-name": suffix} for suffix in files]
