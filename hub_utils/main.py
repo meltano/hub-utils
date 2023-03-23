@@ -1,3 +1,4 @@
+import hashlib
 import json
 import os
 from datetime import datetime
@@ -154,21 +155,28 @@ def extract_metadata_v2(
             data.get("executable", p_name),
             True
         )
+        hash_id = hashlib.md5(json.dumps(sdk_def, sort_keys=True, indent=2).encode("utf-8")).hexdigest()
         file_path = os.path.basename(yaml_file).replace(".yml", "")
         file_name = file_path + ".json"
-        local_file_path = f"{output_dir}/{p_type}/{p_name}/{file_name}"
+        local_file_path = f"{output_dir}/{p_type}/{p_name}/{hash_id}--{file_name}"
         util._write_dict(
             local_file_path,
             sdk_def
         )
         date_now = datetime.utcnow().strftime("%Y-%m-%d")
-        S3().upload(
-            os.environ.get(
-                "AWS_S3_BUCKET"
-            ),
-            f"{p_type}/{p_name}/{file_path}/{date_now}.json",
-            local_file_path
+        s3_file_path = f"{p_type}/{p_name}/{file_path}/{hash_id}--{date_now}.json"
+        s3_bucket = os.environ.get(
+            "AWS_S3_BUCKET"
         )
+        if not S3().hash_exists(s3_bucket, s3_file_path):
+            print(f"Uploading: {s3_file_path}")
+            S3().upload(
+                s3_bucket,
+                s3_file_path,
+                local_file_path
+            )
+        else:
+            print(f"Extract already exists: {s3_file_path}")
 
 
 @app.command()

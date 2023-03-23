@@ -32,12 +32,21 @@ class S3:
         s3 = aws_session.client("s3")
         return s3
 
+    def hash_exists(self, s3_bucket, s3_file_path):
+        components = s3_file_path.split("/")
+        prefix = "/".join(components[:-1])
+        file_name = components[-1]
+        hash_id = file_name.split("--")[0]
+        objs = self._client.list_objects_v2(Bucket=s3_bucket, Prefix=prefix).get('Contents', [])
+        existing_hashes = [os.path.basename(obj["Key"]).split("--")[0] for obj in objs]
+        return hash_id in existing_hashes
+
     def upload(self, bucket, prefix, local_file_path):
         self._client.upload_file(local_file_path, bucket, prefix)
 
     def download_latest(self, bucket, prefix, local_file_path):
         objs = self._client.list_objects_v2(Bucket=bucket, Prefix=prefix)['Contents']
-        latest = sorted([os.path.basename(obj["Key"]).replace(".json", "") for obj in objs])[-1]
+        latest = sorted([os.path.basename(obj["Key"]).replace(".json", "").split("--")[1] for obj in objs])[-1]
         Path(os.path.dirname(local_file_path)).mkdir(parents=True, exist_ok=True)
         self._client.download_file(bucket, f"{prefix}/{latest}.json", local_file_path)
 
