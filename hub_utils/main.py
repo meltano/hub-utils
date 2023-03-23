@@ -128,7 +128,6 @@ def get_variant_names(
 ):
     formatted_output = []
     util = Utilities(True)
-    count = 0
     for yaml_file in find_all_yamls(f_path=f"{hub_root}/_data/meltano/"):
         data = util._read_yaml(yaml_file)
         if plugin_type and yaml_file.split("/")[-3] not in plugin_type.split(","):
@@ -148,9 +147,6 @@ def get_variant_names(
             if not image_name:
                 continue
             formatted_output.append({"plugin-name": suffix, "source-name": image_name.replace("airbyte/", "")})
-            count += 1
-            if count > 5:
-                break
     print(json.dumps(formatted_output).replace('\"', '\\"'))
 
 @app.command()
