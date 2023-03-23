@@ -80,6 +80,11 @@ class Utilities:
             data = self.yaml.load(f)
         return data
 
+    def _read_json(self, path):
+        with open(path, "r") as f:
+            data = json.load(f)
+        return data
+
     @staticmethod
     def _get_plugin_name(repo_url: str):
         return repo_url.split("/")[-1]

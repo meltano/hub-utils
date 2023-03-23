@@ -190,6 +190,32 @@ def extract_metadata_v2(
         else:
             print(f"Extract already exists: {s3_file_path}")
 
+@app.command()
+def upload_airbyte(
+    variant_path_list: str,
+    artifact_name: str,
+):
+    util = Utilities(True)
+    yaml_file = variant_path_list
+    for yaml_file in variant_path_list.split(","):
+        spec_data = util._read_json(artifact_name)
+        p_type, p_name, p_variant = yaml_file.split("/")[-3:]
+        hash_id = hashlib.md5(json.dumps(spec_data, sort_keys=True, indent=2).encode("utf-8")).hexdigest()
+        file_path = os.path.basename(yaml_file).replace(".yml", "")
+        date_now = datetime.utcnow().strftime("%Y-%m-%d")
+        s3_file_path = f"{p_type}/{p_name}/{file_path}/{hash_id}--{date_now}.json"
+        s3_bucket = os.environ.get(
+            "AWS_S3_BUCKET"
+        )
+        if not S3().hash_exists(s3_bucket, s3_file_path):
+            print(f"Uploading: {s3_file_path}")
+            S3().upload(
+                s3_bucket,
+                s3_file_path,
+                artifact_name
+            )
+        else:
+            print(f"Extract already exists: {s3_file_path}")
 
 @app.command()
 def translate(
