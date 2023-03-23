@@ -145,7 +145,6 @@ def get_variant_names(
             suffix = "/".join(yaml_file.split("/")[-3:])
             image_name = [setting.get("value") for setting in data.get("settings") if setting.get("name") == "airbyte_spec.image"][0]
             if not image_name:
-                print(f"Skipping {yaml_file}")
                 continue
             formatted_output.append({"plugin-name": suffix, "source-name": image_name.replace("airbyte/", "")})
     print(json.dumps(formatted_output).replace('\"', '\\"'))
