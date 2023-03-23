@@ -142,12 +142,11 @@ def extract_metadata_v2(
     output_dir: str,
 ):
     util = Utilities(True)
-    failures = []
     for yaml_file in variant_path_list.split(","):
         data = util._read_yaml(yaml_file)
         p_type = util.get_plugin_type(data.get("repo"))
         p_name = data.get("name")
-        sdk_def = util._test(
+        sdk_def = util._test_exception(
             p_name,
             p_type,
             data.get("pip_url"),
@@ -155,9 +154,6 @@ def extract_metadata_v2(
             data.get("executable", p_name),
             True
         )
-        if not sdk_def:
-            failures.append(yaml_file)
-            continue
         file_path = os.path.basename(yaml_file).replace(".yml", "")
         file_name = file_path + ".json"
         local_file_path = f"{output_dir}/{p_type}/{p_name}/{file_name}"
@@ -173,7 +169,6 @@ def extract_metadata_v2(
             f"{p_type}/{p_name}/{file_path}/{date_now}.json",
             local_file_path
         )
-    print(failures)
 
 
 @app.command()
