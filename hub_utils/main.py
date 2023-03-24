@@ -218,7 +218,7 @@ def upload_airbyte(
             print(f"Extract already exists: {s3_file_path}")
 
 @app.command()
-def translate(
+def translate_sdk(
     variant_path_list: str,
     sdk_output_path: str,
 ):
