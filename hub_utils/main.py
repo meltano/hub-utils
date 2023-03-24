@@ -150,7 +150,7 @@ def get_variant_names(
     print(json.dumps(formatted_output).replace('\"', '\\"'))
 
 @app.command()
-def extract_metadata_v2(
+def extract_sdk_metadata_to_s3(
     variant_path_list: str,
     output_dir: str,
 ):
