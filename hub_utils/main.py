@@ -137,6 +137,14 @@ def get_variant_names(
             if "meltano_sdk" not in data.get("keywords", []):
                 continue
             suffix = "/".join(yaml_file.split("/")[-3:])
+            # TODO remove this filtering
+            if suffix not in (
+                "extractors/tap-netlify/franloza.yml", # <3.9 test
+                "extractors/tap-twitter/voxmedia.yml",
+                "extractors/tap-sendinblue/hotgluexyz.yml",
+            ):
+                # Testing a subset
+                continue
             formatted_output.append({"plugin-name":suffix})
 
         if metadata_type == "airbyte":
