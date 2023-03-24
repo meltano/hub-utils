@@ -23,7 +23,7 @@ class MeltanoUtil:
             universal_newlines=True,
         )
         subprocess.run(
-            f'pipx install {pip_url}'.split(" "),
+            f'pipx install {pip_url} --python $(which python)'.split(" "),
             stdout=subprocess.PIPE,
             universal_newlines=True,
             check=True,
