@@ -10,7 +10,7 @@ packages = [{include = "hub_utils"}]
 python = ">=3.8.1,<3.11"
 typer = {extras = ["all"], version = "^0.6.1"}
 ruamel-yaml = "^0.17.21"
-yamllint = "^1.28.0"
+yamllint = "^1.30.0"
 boto3 = "^1.26.96"
 
 
