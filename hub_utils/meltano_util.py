@@ -159,7 +159,7 @@ class MeltanoUtil:
         return [value for key, value in reformatted_settings_2.items()]
 
     def _airbyte_spec_to_about(sdk_about_dict):
-        conn_config = {}
+        conn_config = sdk_about_dict.get("spec", {}).get("connectionSpecification")
         sdk = {
             "name": "tap-airbyte",
             "description": None,
