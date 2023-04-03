@@ -668,7 +668,6 @@ class Utilities:
 
 if __name__ == "__main__":
     util = Utilities(False)
-    util.add("https://github.com/MeltanoLabs/tap-jaffle-shop")
     util.add_airbyte()
     # util.update_sdk("https://github.com/MeltanoLabs/tap-snowflake")
     # util.update_sdk("https://github.com/hotgluexyz/tap-procore")
