@@ -158,8 +158,89 @@ class MeltanoUtil:
                 reformatted_settings_2[name] = setting
         return [value for key, value in reformatted_settings_2.items()]
 
+    def _airbyte_spec_to_about(sdk_about_dict):
+        conn_config = {}
+        sdk = {
+            "name": "tap-airbyte",
+            "description": None,
+            "version": "0.0.1",
+            "sdk_version": "0.14.0",
+            "capabilities": [
+            "catalog",
+            "state",
+            "discover",
+            "about",
+            "stream-maps",
+            "schema-flattening"
+            ],
+            "settings": {
+                "type": "object",
+                "properties": {
+                    "airbyte_spec": {
+                    "type": [
+                        "object",
+                        "null"
+                    ],
+                    "properties": {
+                        "image": {
+                        "type": [
+                            "string"
+                        ],
+                        "description": "Airbyte image to run"
+                        },
+                        "tag": {
+                        "type": [
+                            "string",
+                            "null"
+                        ],
+                        "default": "latest"
+                        }
+                    },
+                    "required": [
+                        "image"
+                    ]
+                    },
+                    "connector_config": conn_config,
+                    "stream_maps": {
+                    "type": [
+                        "object",
+                        "null"
+                    ],
+                    "properties": {},
+                    "description": "Config object for stream maps capability. For more information check out [Stream Maps](https://sdk.meltano.com/en/latest/stream_maps.html)."
+                    },
+                    "stream_map_config": {
+                    "type": [
+                        "object",
+                        "null"
+                    ],
+                    "properties": {},
+                    "description": "User-defined config values to be used within map expressions."
+                    },
+                    "flattening_enabled": {
+                    "type": [
+                        "boolean",
+                        "null"
+                    ],
+                    "description": "'True' to enable schema flattening and automatically expand nested properties."
+                    },
+                    "flattening_max_depth": {
+                    "type": [
+                        "integer",
+                        "null"
+                    ],
+                    "description": "The max depth to flatten schemas."
+                    }
+                }
+            }
+        }
+        return sdk
+
     @staticmethod
     def _parse_sdk_about_settings(sdk_about_dict, enforce_desc=False):
+        if sdk_about_dict.get("type", "").lower() == "spec":
+            # raw airbyte spec message, translate it
+            sdk_about_dict = MeltanoUtil._airbyte_spec_to_about(sdk_about_dict)
         settings_raw = sdk_about_dict.get("settings", {})
         reformatted_settings = []
         settings_group_validation = []

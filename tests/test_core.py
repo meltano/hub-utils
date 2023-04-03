@@ -328,3 +328,11 @@ def test_airbyte_array_enum_string():
 )
 def test_get_label(input, expected):
     assert MeltanoUtil()._get_label(input) == expected
+
+
+def test_airbyte_spec_to_about():
+    raw = _read_data('airbyte_s3_raw.json')
+    expected_about = _read_data('airbyte_s3_about.json')
+    parsed_about = MeltanoUtil._airbyte_spec_to_about(raw)
+    for key, value in expected_about.items():
+        assert value == parsed_about.get(key)
