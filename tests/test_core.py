@@ -335,4 +335,4 @@ def test_airbyte_spec_to_about():
     expected_about = _read_data('airbyte_s3_about.json')
     parsed_about = MeltanoUtil._airbyte_spec_to_about(raw)
     for key, value in expected_about.items():
-        assert value == parsed_about.get(key)
+        assert json.dumps(value) == json.dumps(parsed_about.get(key))
