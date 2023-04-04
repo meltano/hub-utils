@@ -487,7 +487,6 @@ class Utilities:
         self._write_yaml(def_path, definition)
         self._reformat(plugin_type, plugin_name, plugin_variant)
 
-
     def _iterate_existing_settings(self, plugin_name, plugin_variant, plugin_type):
         def_path = (
             f"{self.hub_root}/_data/meltano/{plugin_type}/"
