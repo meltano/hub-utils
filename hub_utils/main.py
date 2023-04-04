@@ -253,7 +253,7 @@ def download_metadata(
     yaml_file: str,
     local_path: str,
 ):
-    p_type, p_name, p_variant = os.path.splitext(yaml_file)[0].split("/")[-3:]
-    suffix = f"{p_type}/{p_name}/{p_variant}"
+    util = Utilities()
+    suffix = util.get_suffix(yaml_file)
     local_file_path = f"{local_path}/{suffix}.json"
     S3().download_latest(os.environ.get("AWS_S3_BUCKET"), suffix, local_file_path)
