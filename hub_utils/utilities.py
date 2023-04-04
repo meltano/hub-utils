@@ -669,6 +669,7 @@ class Utilities:
         p_type, p_name, p_variant = os.path.splitext(yaml_file)[0].split("/")[-3:]
         return f"{p_type}/{p_name}/{p_variant}"
 
+
 if __name__ == "__main__":
     util = Utilities(False)
     util.add_airbyte()
