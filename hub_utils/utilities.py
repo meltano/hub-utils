@@ -12,7 +12,7 @@ import typer
 from ruamel.yaml import YAML
 
 from hub_utils.meltano_util import MeltanoUtil
-from hub_utils.yaml_lint import fix_yaml, run_yamllint
+from hub_utils.yaml_lint import fix_yaml, run_yamllint, fix_arrays, fix_yaml_dict_format
 
 
 class Kind(str, Enum):
@@ -104,6 +104,14 @@ class Utilities:
             return "extractors"
         if "target-" in plugin_name:
             return "loaders"
+
+    @staticmethod
+    def get_plugin_type_from_suffix(suffix: str):
+        return suffix.split("/")[0]
+
+    @staticmethod
+    def get_plugin_variant_from_suffix(suffix: str):
+        return suffix.split("/")[2]
 
     @staticmethod
     def _boilerplate_capabilities(plugin_type):
@@ -485,7 +493,6 @@ class Utilities:
             f"{plugin_name}/{plugin_variant}.yml"
         )
         self._write_yaml(def_path, definition)
-        self._reformat(plugin_type, plugin_name, plugin_variant)
 
     def _iterate_existing_settings(self, plugin_name, plugin_variant, plugin_type):
         def_path = (
@@ -517,7 +524,7 @@ class Utilities:
         for name, setting in name_lookup.items():
             if not setting.get("description"):
                 # If description is null from about, use existing
-                setting["description"] = name_lookup_existing.get(name).get(
+                setting["description"] = name_lookup_existing.get(name, {}).get(
                     "description"
                 )
             new_settings.append(setting)
@@ -533,7 +540,8 @@ class Utilities:
         new_def["capabilities"] = self._merge_capabilities(
             existing_def.get("capabilities"), caps
         )
-        new_def["settings_group_validation"] = sgv
+        if sgv and sgv[0]:
+            new_def["settings_group_validation"] = sgv
         return new_def
 
     def _test_exception(
@@ -663,6 +671,26 @@ class Utilities:
         print(
             f"\nUpdates {plugin_type} {plugin_name} (SDK based - {plugin_variant})\n\n"
         )
+
+    def merge_and_update(self, existing_def, new_extract_json, suffix):
+        plugin_name = new_extract_json.get("name")
+        plugin_type = self.get_plugin_type_from_suffix(suffix)
+        plugin_variant = self.get_plugin_variant_from_suffix(suffix)
+        (
+            new_settings,
+            new_settings_group_validation,
+            new_capabilities,
+        ) = MeltanoUtil._parse_sdk_about_settings(new_extract_json)
+        merged_def = self._merge_definitions(
+            existing_def,
+            new_settings,
+            existing_def.get("keywords"),
+            existing_def.get("maintenance_status"),
+            new_capabilities,
+            new_settings_group_validation,
+        )
+        merged_def_formatted = fix_arrays(fix_yaml_dict_format(merged_def))
+        self._write_updated_def(plugin_name, plugin_variant, plugin_type, merged_def_formatted)
 
     @staticmethod
     def get_suffix(yaml_file):
