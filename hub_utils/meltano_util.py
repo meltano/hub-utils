@@ -199,12 +199,12 @@ class MeltanoUtil:
                     print(f"No type found for: {name}. Defaulting to string")
                     kind = "string"
 
-            # raise Exception(settings)
             kind, options = MeltanoUtil._parse_kind(kind, settings)
             setting_details["kind"] = kind
             if options:
                 setting_details["options"] = options
-
+            if settings.get("default"):
+                setting_details["value"] = settings.get("default")
             reformatted_settings.append(setting_details)
             if settings.get("required"):
                 settings_group_validation.append(settings.get("name"))
@@ -230,6 +230,7 @@ class MeltanoUtil:
                     field = {
                         "name": full_name,
                         "description": subfield.get("description"),
+                        "default": subfield.get("default"),
                         "type": subfield.get("type"),
                         "title": subfield.get("title"),
                         "const": subfield.get("const"),
@@ -248,6 +249,7 @@ class MeltanoUtil:
                     {
                         "name": key,
                         "description": value.get("description"),
+                        "default": value.get("default"),
                         "type": value.get("type"),
                         "title": value.get("title"),
                         "const": value.get("const"),
