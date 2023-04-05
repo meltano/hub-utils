@@ -194,6 +194,39 @@ def test_merge_and_update(patch):
                 }
             ],
         ],
+        # Preserve attributes
+        [
+            [
+                {
+                    "name": "add_metadata_columns",
+                    "description": "The description",
+                    "label": "Add Metadata Columns",
+                    "kind": "boolean",
+                    "value": "$MELTANO_EXTRACT__LOAD_SCHEMA",
+                    "placeholder": "foo",
+                    "documentation": "bar"
+                }
+            ],
+            [
+                {
+                    "name": "add_metadata_columns",
+                    "description": "The description",
+                    "label": "Add Metadata Columns",
+                    "kind": "boolean",
+                }
+            ],
+            [
+                {
+                    "name": "add_metadata_columns",
+                    "description": "The description",
+                    "label": "Add Metadata Columns",
+                    "kind": "boolean",
+                    "value": "$MELTANO_EXTRACT__LOAD_SCHEMA",
+                    "placeholder": "foo",
+                    "documentation": "bar"
+                }
+            ],
+        ],
     ],
 )
 def test_merge_settings(existing, new, expected):
