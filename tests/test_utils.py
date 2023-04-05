@@ -203,7 +203,7 @@ def test_merge_and_update(patch):
             [
                 {
                     "name": "add_metadata_columns",
-                    "description": "| My custom formatted description",
+                    "description": "My custom formatted description.\n Thats long.",
                     "label": "Add Metadata Columns",
                     "kind": "boolean",
                 }
@@ -219,7 +219,7 @@ def test_merge_and_update(patch):
             [
                 {
                     "name": "add_metadata_columns",
-                    "description": "| My custom formatted description",
+                    "description": "My custom formatted description.\n Thats long.",
                     "label": "Add Metadata Columns",
                     "kind": "boolean",
                 }
