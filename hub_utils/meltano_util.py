@@ -165,7 +165,7 @@ class MeltanoUtil:
         settings_group_validation = []
         base_required = settings_raw.get("required", [])
         for settings in MeltanoUtil._traverse_schema_properties(settings_raw):
-            name = settings.get('name')
+            name = settings.get("name")
             description = settings.get("description")
             if not settings.get("description"):
                 if enforce_desc:
@@ -192,9 +192,7 @@ class MeltanoUtil:
 
             if not kind:
                 if enforce_desc:
-                    kind = typer.prompt(
-                        f"[{name}] `kind`", default="string"
-                    )
+                    kind = typer.prompt(f"[{name}] `kind`", default="string")
                 else:
                     name = settings.get("name")
                     print(f"No type found for: {name}. Defaulting to string")

@@ -12,7 +12,13 @@ import typer
 from ruamel.yaml import YAML
 
 from hub_utils.meltano_util import MeltanoUtil
-from hub_utils.yaml_lint import fix_yaml, run_yamllint, fix_arrays, fix_yaml_dict_format
+
+from hub_utils.yaml_lint import (  # isort:skip
+    fix_arrays,
+    fix_yaml,
+    fix_yaml_dict_format,
+    run_yamllint,
+)
 
 
 class Kind(str, Enum):
@@ -522,7 +528,8 @@ class Utilities:
         for name, setting in name_lookup.items():
             existing_desc = name_lookup_existing.get(name, {}).get("description", "")
             if not setting.get("description") or (
-                len(existing_desc) > len(setting.get("description")) and "\n" in existing_desc
+                len(existing_desc) > len(setting.get("description"))
+                and "\n" in existing_desc
             ):
                 # If the --about description is null, keep existing.
                 # If the existing description is longer and has new line characters

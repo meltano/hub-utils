@@ -13,24 +13,25 @@ from hub_utils.yaml_lint import find_all_yamls
 app = typer.Typer()
 
 SDK_SUFFIX_LIST = [
-        "extractors/tap-circle-ci/meltanolabs",
-        "extractors/tap-cloudwatch/meltanolabs",
-        "extractors/tap-csv/meltanolabs",
-        "extractors/tap-dbt/meltanolabs",
-        "extractors/tap-duckdb/meltanolabs",
-        "extractors/tap-github/meltanolabs",
-        "extractors/tap-google-analytics/meltanolabs",
-        "extractors/tap-jaffle-shop/meltanolabs",
-        "extractors/tap-messagebird/meltanolabs",
-        "extractors/tap-postgres/meltanolabs",
-        "extractors/tap-slack/meltanolabs",
-        "extractors/tap-snowflake/meltanolabs",
-        "extractors/tap-stackexchange/meltanolabs",
-        "loaders/target-csv/meltanolabs",
-        "loaders/target-postgres/meltanolabs",
-        "loaders/target-snowflake/meltanolabs",
-        "loaders/target-yaml/meltanolabs",
-    ]
+    "extractors/tap-circle-ci/meltanolabs",
+    "extractors/tap-cloudwatch/meltanolabs",
+    "extractors/tap-csv/meltanolabs",
+    "extractors/tap-dbt/meltanolabs",
+    "extractors/tap-duckdb/meltanolabs",
+    "extractors/tap-github/meltanolabs",
+    "extractors/tap-google-analytics/meltanolabs",
+    "extractors/tap-jaffle-shop/meltanolabs",
+    "extractors/tap-messagebird/meltanolabs",
+    "extractors/tap-postgres/meltanolabs",
+    "extractors/tap-slack/meltanolabs",
+    "extractors/tap-snowflake/meltanolabs",
+    "extractors/tap-stackexchange/meltanolabs",
+    "loaders/target-csv/meltanolabs",
+    "loaders/target-postgres/meltanolabs",
+    "loaders/target-snowflake/meltanolabs",
+    "loaders/target-yaml/meltanolabs",
+]
+
 
 @app.callback()
 def callback():
@@ -280,6 +281,7 @@ def download_metadata(
         suffix = util.get_suffix(yaml_file)
         local_file_path = f"{local_path}/{suffix}.json"
         s3.download_latest(os.environ.get("AWS_S3_BUCKET"), suffix, local_file_path)
+
 
 # GITHUB ACTIONS
 @app.command()

@@ -15,8 +15,8 @@ def test_download_metadata(patch):
     hub_yml_path = f"{PATH}/data/hub_data/_data/extractors/tap-csv/meltanolabs.yml"
 
     download_metadata(
+        local_path,
         hub_yml_path,
-        local_path
     )
     patch.assert_called_with(
         expected_bucket,
@@ -30,14 +30,14 @@ def test_download_metadata_list(patch):
     expected_bucket = "TEST_BUCKET"
     os.environ["AWS_S3_BUCKET"] = expected_bucket
     local_path = f"{PATH}/data/output_path"
-    hub_yml_path = ",".join((
+    hub_yml_path = ",".join([
         f"{PATH}/data/hub_data/_data/extractors/tap-csv/meltanolabs.yml",
         f"{PATH}/data/hub_data/_data/extractors/tap-cloudwatch/meltanolabs.yml",
-    ))
+    ])
 
     download_metadata(
+        local_path,
         hub_yml_path,
-        local_path
     )
     patch.assert_has_calls([
         call(
