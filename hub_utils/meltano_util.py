@@ -159,6 +159,37 @@ class MeltanoUtil:
         return [value for key, value in reformatted_settings_2.items()]
 
     @staticmethod
+    def _handle_description(description, name, enforce_desc):
+        if not description:
+            if enforce_desc:
+                description = typer.prompt(
+                    f"[{name}] `description`",
+                    default=MeltanoUtil._default_description(name),
+                )
+            else:
+                if name == "tag":
+                    description = "Airbyte image tag"
+                else:
+                    description = ""
+        return description
+
+    @staticmethod
+    def _get_kind_from_type(type, name, enforce_desc):
+        if isinstance(type, list):
+            kind = [s_type for s_type in type if s_type != "null"][0]
+        else:
+            kind = type
+
+        if not kind:
+            if enforce_desc:
+                kind = typer.prompt(f"[{name}] `kind`", default="string")
+            else:
+                name = name
+                print(f"No type found for: {name}. Defaulting to string")
+                kind = "string"
+        return kind
+
+    @staticmethod
     def _parse_sdk_about_settings(sdk_about_dict, enforce_desc=False):
         settings_raw = sdk_about_dict.get("settings", {})
         reformatted_settings = []
@@ -166,37 +197,17 @@ class MeltanoUtil:
         base_required = settings_raw.get("required", [])
         for settings in MeltanoUtil._traverse_schema_properties(settings_raw):
             name = settings.get("name")
-            description = settings.get("description")
-            if not settings.get("description"):
-                if enforce_desc:
-                    description = typer.prompt(
-                        f"[{name}] `description`",
-                        default=MeltanoUtil._default_description(name),
-                    )
-                else:
-                    if name == "tag":
-                        description = "Airbyte image tag"
-                    else:
-                        description = ""
+            description = MeltanoUtil._handle_description(
+                settings.get("description"), name, enforce_desc
+            )
             setting_details = {
                 "name": name,
                 "label": MeltanoUtil._get_label(name),
                 "description": description,
             }
-            if isinstance(settings.get("type"), list):
-                kind = [s_type for s_type in settings.get("type") if s_type != "null"][
-                    0
-                ]
-            else:
-                kind = settings.get("type")
-
-            if not kind:
-                if enforce_desc:
-                    kind = typer.prompt(f"[{name}] `kind`", default="string")
-                else:
-                    name = settings.get("name")
-                    print(f"No type found for: {name}. Defaulting to string")
-                    kind = "string"
+            kind = MeltanoUtil._get_kind_from_type(
+                settings.get("type"), name, enforce_desc
+            )
 
             kind, options = MeltanoUtil._parse_kind(kind, settings)
             setting_details["kind"] = kind
