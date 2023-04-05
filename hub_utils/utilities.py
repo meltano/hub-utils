@@ -529,6 +529,9 @@ class Utilities:
             existing_value = name_lookup_existing.get(name, {}).get("value", "")
             if existing_value.startswith("$MELTANO"):
                 setting["value"] = existing_value
+            placeholder_value = name_lookup_existing.get(name, {}).get("placeholder", "")
+            if placeholder_value:
+                setting["placeholder"] = placeholder_value
             new_settings.append(setting)
         return settings
 
