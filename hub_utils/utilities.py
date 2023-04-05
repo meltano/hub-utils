@@ -514,8 +514,6 @@ class Utilities:
 
     @staticmethod
     def _merge_settings(existing_settings, settings):
-        if not settings:
-            return existing_settings
         new_settings = []
         name_lookup = {setting.get("name"): setting for setting in settings}
         name_lookup_existing = {
@@ -527,6 +525,10 @@ class Utilities:
                 setting["description"] = name_lookup_existing.get(name, {}).get(
                     "description"
                 )
+            # TODO: if existing is much longer we might want to keep it
+            existing_value = name_lookup_existing.get(name, {}).get("value", "")
+            if existing_value.startswith("$MELTANO"):
+                setting["value"] = existing_value
             new_settings.append(setting)
         return settings
 
@@ -673,15 +675,15 @@ class Utilities:
         )
 
     def merge_and_update(
-            self,
-            existing_def,
-            plugin_name,
-            plugin_type,
-            plugin_variant,
-            new_settings,
-            new_capabilities,
-            new_settings_group_validation,
-        ):
+        self,
+        existing_def,
+        plugin_name,
+        plugin_type,
+        plugin_variant,
+        new_settings,
+        new_capabilities,
+        new_settings_group_validation,
+    ):
         merged_def = self._merge_definitions(
             existing_def,
             new_settings,
@@ -691,7 +693,9 @@ class Utilities:
             new_settings_group_validation,
         )
         merged_def_formatted = fix_arrays(fix_yaml_dict_format(merged_def))
-        self._write_updated_def(plugin_name, plugin_variant, plugin_type, merged_def_formatted)
+        self._write_updated_def(
+            plugin_name, plugin_variant, plugin_type, merged_def_formatted
+        )
 
     @staticmethod
     def get_suffix(yaml_file):
