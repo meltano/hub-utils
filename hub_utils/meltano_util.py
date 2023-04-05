@@ -165,21 +165,22 @@ class MeltanoUtil:
         settings_group_validation = []
         base_required = settings_raw.get("required", [])
         for settings in MeltanoUtil._traverse_schema_properties(settings_raw):
+            name = settings.get('name')
             description = settings.get("description")
             if not settings.get("description"):
                 if enforce_desc:
                     description = typer.prompt(
-                        f"[{settings.get('name')}] `description`",
-                        default=MeltanoUtil._default_description(settings.get("name")),
+                        f"[{name}] `description`",
+                        default=MeltanoUtil._default_description(name),
                     )
                 else:
-                    if settings.get("name") == "tag":
+                    if name == "tag":
                         description = "Airbyte image tag"
                     else:
                         description = ""
             setting_details = {
-                "name": settings.get("name"),
-                "label": MeltanoUtil._get_label(settings.get("name")),
+                "name": name,
+                "label": MeltanoUtil._get_label(name),
                 "description": description,
             }
             if isinstance(settings.get("type"), list):
@@ -192,7 +193,7 @@ class MeltanoUtil:
             if not kind:
                 if enforce_desc:
                     kind = typer.prompt(
-                        f"[{settings.get('name')}] `kind`", default="string"
+                        f"[{name}] `kind`", default="string"
                     )
                 else:
                     name = settings.get("name")
@@ -204,7 +205,8 @@ class MeltanoUtil:
             if options:
                 setting_details["options"] = options
             if settings.get("default"):
-                setting_details["value"] = settings.get("default")
+                if kind != "date_iso8601":
+                    setting_details["value"] = settings.get("default")
             reformatted_settings.append(setting_details)
             if settings.get("required"):
                 settings_group_validation.append(settings.get("name"))

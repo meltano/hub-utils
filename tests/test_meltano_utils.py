@@ -360,3 +360,48 @@ def test_sdk_about_parsing_default():
             "value": "my default"
         }
     ]
+
+
+def test_sdk_about_parsing_skip_default_dates():
+    input = {
+        "settings": {
+            "type": "object",
+            "properties": {
+                "start_date": {
+                    "type": [
+                        "string",
+                        "null"
+                    ],
+                    "format": "date-time",
+                    "default": "2020-04-04T19:54:26.375510Z",
+                    "description": "The description"
+                },
+                "end_date": {
+                    "type": [
+                        "string",
+                        "null"
+                    ],
+                    "format": "date-time",
+                    "default": "2020-04-04T19:54:26.375510Z",
+                    "description": "The description"
+                }
+            },
+            "required": []
+        }
+        
+    }
+    settings, _, _ = MeltanoUtil._parse_sdk_about_settings(input)
+    assert settings == [
+        {
+            "name": "start_date",
+            "label": "Start Date",
+            "description": "The description",
+            "kind": "date_iso8601",
+        },
+        {
+            "name": "end_date",
+            "label": "End Date",
+            "description": "The description",
+            "kind": "date_iso8601",
+        }
+    ]
