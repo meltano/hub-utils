@@ -165,7 +165,7 @@ def test_merge_and_update(patch):
                 }
             ],
         ],
-        # Preserve manually added value
+        # Preserve manually added attributes
         [
             [
                 {
@@ -174,6 +174,8 @@ def test_merge_and_update(patch):
                     "label": "Add Metadata Columns",
                     "kind": "boolean",
                     "value": "$MELTANO_EXTRACT__LOAD_SCHEMA",
+                    "placeholder": "foo",
+                    "documentation": "bar"
                 }
             ],
             [
@@ -191,26 +193,17 @@ def test_merge_and_update(patch):
                     "label": "Add Metadata Columns",
                     "kind": "boolean",
                     "value": "$MELTANO_EXTRACT__LOAD_SCHEMA",
+                    "placeholder": "foo",
+                    "documentation": "bar"
                 }
             ],
         ],
-        # Preserve attributes
+        # Preserve custom yaml descriptions starting with pipe
         [
             [
                 {
                     "name": "add_metadata_columns",
-                    "description": "The description",
-                    "label": "Add Metadata Columns",
-                    "kind": "boolean",
-                    "value": "$MELTANO_EXTRACT__LOAD_SCHEMA",
-                    "placeholder": "foo",
-                    "documentation": "bar"
-                }
-            ],
-            [
-                {
-                    "name": "add_metadata_columns",
-                    "description": "The description",
+                    "description": "| My custom formatted description",
                     "label": "Add Metadata Columns",
                     "kind": "boolean",
                 }
@@ -218,12 +211,17 @@ def test_merge_and_update(patch):
             [
                 {
                     "name": "add_metadata_columns",
-                    "description": "The description",
+                    "description": "The tap description",
                     "label": "Add Metadata Columns",
                     "kind": "boolean",
-                    "value": "$MELTANO_EXTRACT__LOAD_SCHEMA",
-                    "placeholder": "foo",
-                    "documentation": "bar"
+                }
+            ],
+            [
+                {
+                    "name": "add_metadata_columns",
+                    "description": "| My custom formatted description",
+                    "label": "Add Metadata Columns",
+                    "kind": "boolean",
                 }
             ],
         ],

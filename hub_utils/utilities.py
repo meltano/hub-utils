@@ -520,11 +520,14 @@ class Utilities:
             setting.get("name"): setting for setting in existing_settings
         }
         for name, setting in name_lookup.items():
-            if not setting.get("description"):
-                # If description is null from about, use existing
-                setting["description"] = name_lookup_existing.get(name, {}).get(
-                    "description"
-                )
+            existing_desc = name_lookup_existing.get(name, {}).get(
+                "description", ""
+            )
+            if existing_desc.startswith("|") or not setting.get("description"):
+                # If description starts with a | then its custom, so keep it.
+                # Or if the --about description is null, also keep it.
+                setting["description"] = existing_desc
+
             # TODO: if existing is much longer we might want to keep it
             existing_value = name_lookup_existing.get(name, {}).get("value", "")
             if existing_value.startswith("$MELTANO"):
