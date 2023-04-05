@@ -672,15 +672,16 @@ class Utilities:
             f"\nUpdates {plugin_type} {plugin_name} (SDK based - {plugin_variant})\n\n"
         )
 
-    def merge_and_update(self, existing_def, new_extract_json, suffix):
-        plugin_name = new_extract_json.get("name")
-        plugin_type = self.get_plugin_type_from_suffix(suffix)
-        plugin_variant = self.get_plugin_variant_from_suffix(suffix)
-        (
+    def merge_and_update(
+            self,
+            existing_def,
+            plugin_name,
+            plugin_type,
+            plugin_variant,
             new_settings,
-            new_settings_group_validation,
             new_capabilities,
-        ) = MeltanoUtil._parse_sdk_about_settings(new_extract_json)
+            new_settings_group_validation,
+        ):
         merged_def = self._merge_definitions(
             existing_def,
             new_settings,

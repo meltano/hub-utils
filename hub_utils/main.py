@@ -298,8 +298,17 @@ def merge_metadata(
         local_file_path = f"{local_path}/{suffix}.json"
         new_extract_json = util._read_json(local_file_path)
         existing_def = util._read_yaml(yaml_file)
+        (
+            new_settings,
+            new_settings_group_validation,
+            new_capabilities,
+        ) = MeltanoUtil._parse_sdk_about_settings(new_extract_json)
         util.merge_and_update(
             existing_def,
-            new_extract_json,
-            suffix
+            new_extract_json.get("name"),
+            util.get_plugin_type_from_suffix(suffix),
+            util.get_plugin_variant_from_suffix(suffix),
+            new_settings,
+            new_capabilities,
+            new_settings_group_validation,
         )
