@@ -35,7 +35,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
-      HUB_ROOT_PATH: "/tmp"
+      HUB_ROOT_PATH: "/usr/local/hub_repo/hub"
     strategy:
       matrix:
         python-version: ["3.7", "3.8", "3.9", "3.10"]
@@ -51,7 +51,7 @@ jobs:
         pip install poetry==1.2.*
     - name: Install dependencies
       run: |
-        git clone https://github.com/meltano/hub.git /tmp
+        git clone https://github.com/meltano/hub.git /usr/local/hub_repo/
     - name: Install dependencies
       run: |
         poetry install
