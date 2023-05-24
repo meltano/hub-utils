@@ -76,7 +76,6 @@ class MeltanoUtil:
             )
             return json.loads(about_content.stdout)
 
-
     @staticmethod
     def _get_maintainer(
         variant,
@@ -87,14 +86,9 @@ class MeltanoUtil:
         elif variant in ["matatika", "autoidm", "hotglue", "hotgluexyz"]:
             maintainer = "partner"
         return maintainer
-        
+
     @staticmethod
-    def get_quality(
-        variant,
-        is_sdk_based,
-        usage_count,
-        responsiveness
-    ):
+    def get_quality(variant, is_sdk_based, usage_count, responsiveness):
         maintainer = MeltanoUtil._get_maintainer(variant)
         quality = "unknown"
 
@@ -102,13 +96,21 @@ class MeltanoUtil:
             quality = "gold"
         elif maintainer == "partner" and is_sdk_based:
             quality = "gold"
-        elif maintainer == "partner" and usage_count >= 1 and responsiveness in ["medium", "high"]:
+        elif (
+            maintainer == "partner"
+            and usage_count >= 1
+            and responsiveness in ["medium", "high"]
+        ):
             quality = "silver"
         elif maintainer == "partner":
             quality = "bronze"
         elif maintainer == "community" and is_sdk_based:
             quality = "silver"
-        elif maintainer == "community" and usage_count >= 1 and responsiveness in ["medium", "high"]:
+        elif (
+            maintainer == "community"
+            and usage_count >= 1
+            and responsiveness in ["medium", "high"]
+        ):
             quality = "silver"
         elif maintainer == "community" and usage_count >= 1:
             quality = "bronze"
