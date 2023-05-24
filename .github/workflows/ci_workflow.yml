@@ -35,7 +35,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
-      HUB_ROOT_PATH: "${{ vars.GITHUB_WORKSPACE }}/hub_repo/hub"
+      HUB_ROOT_PATH: $GITHUB_WORKSPACE/hub_repo/hub"
     strategy:
       matrix:
         python-version: ["3.7", "3.8", "3.9", "3.10"]
@@ -53,7 +53,7 @@ jobs:
       uses: actions/checkout@v2
       with:
         repository: meltano/hub
-        path: ${{ github.GITHUB_WORKSPACE }}/hub_repo
+        path: $GITHUB_WORKSPACE/hub_repo
         ref: main
     - name: Install dependencies
       run: |
