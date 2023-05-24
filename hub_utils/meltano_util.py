@@ -76,6 +76,44 @@ class MeltanoUtil:
             )
             return json.loads(about_content.stdout)
 
+
+    @staticmethod
+    def _get_maintainer(
+        variant,
+    ):
+        maintainer = "community"
+        if variant in ["meltano", "meltanolabs"]:
+            maintainer = "official"
+        elif variant in ["matatika", "autoidm", "hotglue", "hotgluexyz"]:
+            maintainer = "partner"
+        return maintainer
+        
+    @staticmethod
+    def get_quality(
+        variant,
+        is_sdk_based,
+        usage_count,
+        responsiveness
+    ):
+        maintainer = MeltanoUtil._get_maintainer(variant)
+        quality = "unknown"
+
+        if maintainer == "official":
+            quality = "gold"
+        elif maintainer == "partner" and is_sdk_based:
+            quality = "gold"
+        elif maintainer == "partner" and usage_count >= 1 and responsiveness in ["medium", "high"]:
+            quality = "silver"
+        elif maintainer == "partner":
+            quality = "bronze"
+        elif maintainer == "community" and is_sdk_based:
+            quality = "silver"
+        elif maintainer == "community" and usage_count >= 1 and responsiveness in ["medium", "high"]:
+            quality = "silver"
+        elif maintainer == "community" and usage_count >= 1:
+            quality = "bronze"
+        return quality
+
     @staticmethod
     def _get_label(name):
         new_label = []
