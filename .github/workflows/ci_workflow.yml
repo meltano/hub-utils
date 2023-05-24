@@ -35,7 +35,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
-      HUB_ROOT_PATH: $GITHUB_WORKSPACE/hub_repo/hub"
+      HUB_ROOT_PATH: $GITHUB_WORKSPACE/hub_repo/hub
     strategy:
       matrix:
         python-version: ["3.7", "3.8", "3.9", "3.10"]
