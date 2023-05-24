@@ -35,7 +35,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
-      HUB_ROOT_PATH: "/usr/local/hub_repo/hub"
+      HUB_ROOT_PATH: "${{ vars.GITHUB_WORKSPACE }}/hub_repo/hub"
     strategy:
       matrix:
         python-version: ["3.7", "3.8", "3.9", "3.10"]
@@ -49,9 +49,12 @@ jobs:
       run: |
         python -m pip install --upgrade pip
         pip install poetry==1.2.*
-    - name: Install dependencies
-      run: |
-        git clone https://github.com/meltano/hub.git /usr/local/hub_repo/
+    - name: Clone supercharge docs repository
+      uses: actions/checkout@v2
+      with:
+        repository: meltano/hub
+        path: ${{ vars.GITHUB_WORKSPACE }}/hub_repo
+        ref: main
     - name: Install dependencies
       run: |
         poetry install
