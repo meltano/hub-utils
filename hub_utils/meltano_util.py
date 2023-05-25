@@ -92,9 +92,14 @@ class MeltanoUtil:
         maintainer = MeltanoUtil._get_maintainer(variant)
         quality = "unknown"
 
-        if maintainer == "official":
+        if maintainer == "official" and is_sdk_based:
             quality = "gold"
-        elif maintainer == "partner" and is_sdk_based:
+        elif maintainer == "official" and usage_count >= 1 and responsiveness != "low":
+            quality = "silver"
+        elif maintainer == "official":
+            quality = "bronze"
+
+        if maintainer == "partner" and is_sdk_based:
             quality = "gold"
         elif (
             maintainer == "partner"
@@ -104,6 +109,14 @@ class MeltanoUtil:
             quality = "silver"
         elif maintainer == "partner":
             quality = "bronze"
+
+        if (
+            maintainer == "community"
+            and is_sdk_based
+            and usage_count >= 6
+            and responsiveness in ["medium", "high"]
+        ):
+            quality = "gold"
         elif maintainer == "community" and is_sdk_based:
             quality = "silver"
         elif (
@@ -114,6 +127,7 @@ class MeltanoUtil:
             quality = "silver"
         elif maintainer == "community" and usage_count >= 1:
             quality = "bronze"
+
         return quality
 
     @staticmethod

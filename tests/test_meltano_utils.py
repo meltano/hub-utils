@@ -421,15 +421,15 @@ def test_sdk_about_parsing_skip_default_dates():
         [["meltanolabs", True, 6, "low"], "gold"],
         [["meltanolabs", True, 6, "medium"], "gold"],
         [["meltanolabs", True, 6, "high"], "gold"],
-        [["meltanolabs", False, 0, "low"], "gold"],
-        [["meltanolabs", False, 0, "medium"], "gold"],
-        [["meltanolabs", False, 0, "high"], "gold"],
-        [["meltanolabs", False, 1, "low"], "gold"],
-        [["meltanolabs", False, 1, "medium"], "gold"],
-        [["meltanolabs", False, 1, "high"], "gold"],
-        [["meltanolabs", False, 6, "low"], "gold"],
-        [["meltanolabs", False, 6, "medium"], "gold"],
-        [["meltanolabs", False, 6, "high"], "gold"],
+        [["meltanolabs", False, 0, "low"], "bronze"],
+        [["meltanolabs", False, 0, "medium"], "bronze"],
+        [["meltanolabs", False, 0, "high"], "bronze"],
+        [["meltanolabs", False, 1, "low"], "bronze"],
+        [["meltanolabs", False, 1, "medium"], "silver"],
+        [["meltanolabs", False, 1, "high"], "silver"],
+        [["meltanolabs", False, 6, "low"], "bronze"],
+        [["meltanolabs", False, 6, "medium"], "silver"],
+        [["meltanolabs", False, 6, "high"], "silver"],
 
         # Partner
         [["matatika", True, 0, "low"], "gold"],
@@ -459,8 +459,8 @@ def test_sdk_about_parsing_skip_default_dates():
         [["foobar", True, 1, "medium"], "silver"],
         [["foobar", True, 1, "high"], "silver"],
         [["foobar", True, 6, "low"], "silver"],
-        [["foobar", True, 6, "medium"], "silver"],
-        [["foobar", True, 6, "high"], "silver"],
+        [["foobar", True, 6, "medium"], "gold"],
+        [["foobar", True, 6, "high"], "gold"],
         [["foobar", False, 0, "low"], "unknown"],
         [["foobar", False, 0, "medium"], "unknown"],
         [["foobar", False, 0, "high"], "unknown"],
@@ -473,4 +473,4 @@ def test_sdk_about_parsing_skip_default_dates():
     ]
 )
 def test_get_quality(input, expected):
-    assert MeltanoUtil.get_quality(*input) == expected
+    assert MeltanoUtil.get_quality(*input) == expected, input
