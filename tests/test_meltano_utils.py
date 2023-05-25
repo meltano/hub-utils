@@ -476,6 +476,11 @@ def test_sdk_about_parsing_skip_default_dates():
 
         # Airbyte
         [["airbyte", False, 0, "low"], "bronze"],
+
+        # Transferwise
+        [["transferwise", False, 6, "low"], "silver"],
+        [["transferwise", False, 1, "medium"], "silver"],
+        [["transferwise", False, 0, "low"], "bronze"],
     ]
 )
 def test_get_quality(input, expected):
