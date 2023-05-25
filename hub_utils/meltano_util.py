@@ -88,46 +88,51 @@ class MeltanoUtil:
         return maintainer
 
     @staticmethod
+    def _evaluate_official(is_sdk_based, usage_count, responsiveness) -> bool:
+        quality = "bronze"
+        if is_sdk_based:
+            quality = "gold"
+        elif usage_count >= 1 and responsiveness != "low":
+            quality = "silver"
+        return quality
+
+    @staticmethod
+    def _evaluate_partner(is_sdk_based, usage_count, responsiveness) -> bool:
+        quality = "bronze"
+        if is_sdk_based:
+            quality = "gold"
+        elif usage_count >= 1 and responsiveness != "low":
+            quality = "silver"
+        return quality
+
+    @staticmethod
+    def _evaluate_community(is_sdk_based, usage_count, responsiveness) -> bool:
+        quality = "unknown"
+        if is_sdk_based and usage_count >= 6 and responsiveness != "low":
+            quality = "gold"
+        elif is_sdk_based:
+            quality = "silver"
+        elif usage_count >= 1 and responsiveness != "low":
+            quality = "silver"
+        elif usage_count >= 1 and responsiveness == "low":
+            quality = "bronze"
+        return quality
+
+    @staticmethod
     def get_quality(variant, is_sdk_based, usage_count, responsiveness):
         maintainer = MeltanoUtil._get_maintainer(variant)
-        quality = "unknown"
-
-        if maintainer == "official" and is_sdk_based:
-            quality = "gold"
-        elif maintainer == "official" and usage_count >= 1 and responsiveness != "low":
-            quality = "silver"
-        elif maintainer == "official":
-            quality = "bronze"
-
-        if maintainer == "partner" and is_sdk_based:
-            quality = "gold"
-        elif (
-            maintainer == "partner"
-            and usage_count >= 1
-            and responsiveness in ["medium", "high"]
-        ):
-            quality = "silver"
+        if maintainer == "official":
+            quality = MeltanoUtil._evaluate_official(
+                is_sdk_based, usage_count, responsiveness
+            )
         elif maintainer == "partner":
-            quality = "bronze"
-
-        if (
-            maintainer == "community"
-            and is_sdk_based
-            and usage_count >= 6
-            and responsiveness in ["medium", "high"]
-        ):
-            quality = "gold"
-        elif maintainer == "community" and is_sdk_based:
-            quality = "silver"
-        elif (
-            maintainer == "community"
-            and usage_count >= 1
-            and responsiveness in ["medium", "high"]
-        ):
-            quality = "silver"
-        elif maintainer == "community" and usage_count >= 1:
-            quality = "bronze"
-
+            quality = MeltanoUtil._evaluate_partner(
+                is_sdk_based, usage_count, responsiveness
+            )
+        elif maintainer == "community":
+            quality = MeltanoUtil._evaluate_community(
+                is_sdk_based, usage_count, responsiveness
+            )
         return quality
 
     @staticmethod
