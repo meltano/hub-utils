@@ -106,7 +106,7 @@ class MeltanoUtil:
         return quality
 
     @staticmethod
-    def _evaluate_community(is_sdk_based, usage_count, responsiveness) -> bool:
+    def _evaluate_community(variant, is_sdk_based, usage_count, responsiveness) -> bool:
         quality = "unknown"
         if is_sdk_based and usage_count >= 6 and responsiveness != "low":
             quality = "gold"
@@ -114,7 +114,9 @@ class MeltanoUtil:
             quality = "silver"
         elif usage_count >= 1 and responsiveness != "low":
             quality = "silver"
-        elif usage_count >= 1 and responsiveness == "low":
+        elif usage_count >= 1:
+            quality = "bronze"
+        elif variant in ["singer-io", "airbyte"]:
             quality = "bronze"
         return quality
 
@@ -131,7 +133,7 @@ class MeltanoUtil:
             )
         elif maintainer == "community":
             quality = MeltanoUtil._evaluate_community(
-                is_sdk_based, usage_count, responsiveness
+                variant, is_sdk_based, usage_count, responsiveness
             )
         return quality
 

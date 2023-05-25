@@ -470,6 +470,12 @@ def test_sdk_about_parsing_skip_default_dates():
         [["foobar", False, 6, "low"], "bronze"],
         [["foobar", False, 6, "medium"], "silver"],
         [["foobar", False, 6, "high"], "silver"],
+
+        # Singer
+        [["singer-io", False, 0, "low"], "bronze"],
+
+        # Airbyte
+        [["airbyte", False, 0, "low"], "bronze"],
     ]
 )
 def test_get_quality(input, expected):
