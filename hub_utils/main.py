@@ -77,6 +77,8 @@ def update_quality(
     util = Utilities(True)
     usage_metrics = util._read_yaml(metrics_file_path)
     for yaml_file in find_all_yamls(f_path=f"{util.hub_root}/_data/meltano/"):
+        if yaml_file.split("/")[-3] not in ("extractors", "loaders"):
+            continue
         data = util._read_yaml(yaml_file)
         is_sdk_based = False
 
