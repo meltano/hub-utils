@@ -62,7 +62,7 @@ class Utilities:
         self.yaml = YAML()
         self.auto_accept = auto_accept
         self.hub_root = os.getenv(
-            "HUB_ROOT_PATH"
+            "HUB_ROOT_PATH", self._prompt("Enter Hub Root Path")
         )
         self.default_variants_path = f"{self.hub_root}/_data/default_variants.yml"
         self.maintainers_path = f"{self.hub_root}/_data/maintainers.yml"
