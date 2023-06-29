@@ -74,8 +74,57 @@ def callback():
 
 @app.command()
 def add(repo_url: str = None, auto_accept: bool = typer.Option(False)):
+    """
+    Add a new tap or target to the hub.
+    It will prompt you for any attributes that need input.
+
+    If the plugin is SDK based it will do its best to install the plugin and scrape the settings for you.
+    It will prompt you for any missing attributes. If its not SDK based it will prompt you for
+    settings 1 at a time and help you by suggesting defaults that you can accept or override.
+    """
     util = Utilities(auto_accept)
+    if "airbytehq/airbyte" in repo_url:
+        if util._prompt("Is this an Airbyte variant?", True, type=bool):
+            util.add_airbyte(repo_url)
+            return
+
     util.add(repo_url)
+    if "hotglue" in repo_url:
+        if util._prompt("Is this a Hotglue variant?", True, type=bool):
+            # Attempt to scrape logo from hotglue's website
+            name = repo_url.split("/")[-1]
+            service_name = name.replace("tap-", "").replace("target-", "")
+            ext = ".svg"
+            url = f"https://s3.amazonaws.com/cdn.hotglue.xyz/images/logos/{service_name}{ext}"
+            resp = requests.get(url)
+            if resp.status_code != 200:
+                ext = ".png"
+                url = (
+                    f"https://s3.amazonaws.com/cdn.hotglue.xyz/images/logos/{service_name}{ext}"
+                )
+                resp = requests.get(url)
+                if resp.status_code != 200:
+                    ext = ".jpeg"
+                    url = (
+                        "https://s3.amazonaws.com/cdn.hotglue.xyz/"
+                        f"images/logos/{service_name}{ext}"
+                    )
+                    resp = requests.get(url)
+                    if resp.status_code != 200:
+                        ext = ".webp"
+                        url = (
+                            f"https://s3.amazonaws.com/cdn.hotglue.xyz/images"
+                            f"/logos/{service_name}{ext}"
+                        )
+                        resp = requests.get(url)
+                        if resp.status_code != 200:
+                            print(f"Unable to find logo for {service_name}")
+                            return
+            with open(
+                f"{util.hub_root}/static/assets/logos/extractors/{service_name}{ext}", "wb"
+            ) as f:
+                f.write(resp.content)
+
 
 
 @app.command()
@@ -84,6 +133,14 @@ def update_definition(
     plugin_name: str = None,
     auto_accept: bool = typer.Option(False),
 ):
+    """
+    Update the definition of a tap or target in the hub.
+
+    Similar to the `add` command it will try to auto update using SDK settings or prompt you for input.
+    When merging it will use the following rules:
+    - if SDK setting description is empty it prefers the existing description
+    - if the existing description longer than the scraped setting and has new lines then its likely manually overridden on the hub so prefer that one.
+    """
     util = Utilities(auto_accept)
     if util._prompt("is_meltano_sdk", True, type=bool):
         util.update_sdk(repo_url, plugin_name)
@@ -95,6 +152,13 @@ def update_definition(
 def update_quality(
     metrics_file_path: str,
 ):
+    """
+    Update the quality of all taps and targets on the hub.
+
+    This command accepts a path to the
+    [variant_metrics.yml](https://github.com/meltano/hub/blob/main/_data/variant_metrics.yml)
+    yaml file, make sure its the most up to date version likely sourced from S3.
+    """
     util = Utilities(True)
     usage_metrics = util._read_yaml(metrics_file_path)["metrics"]
     for yaml_file in find_all_yamls(f_path=f"{util.hub_root}/_data/meltano/"):
@@ -115,53 +179,9 @@ def update_quality(
 
 
 @app.command()
-def add_airbyte(repo_url: str = None, auto_accept: bool = typer.Option(False)):
-    util = Utilities(auto_accept)
-    util.add_airbyte(repo_url)
-
-
-@app.command()
-def add_hotglue(repo_url: str = None, auto_accept: bool = typer.Option(False)):
-    util = Utilities(auto_accept)
-    util.add(repo_url)
-    name = repo_url.split("/")[-1]
-    service_name = name.replace("tap-", "").replace("target-", "")
-    ext = ".svg"
-    url = f"https://s3.amazonaws.com/cdn.hotglue.xyz/images/logos/{service_name}{ext}"
-    resp = requests.get(url)
-    if resp.status_code != 200:
-        ext = ".png"
-        url = (
-            f"https://s3.amazonaws.com/cdn.hotglue.xyz/images/logos/{service_name}{ext}"
-        )
-        resp = requests.get(url)
-        if resp.status_code != 200:
-            ext = ".jpeg"
-            url = (
-                "https://s3.amazonaws.com/cdn.hotglue.xyz/"
-                f"images/logos/{service_name}{ext}"
-            )
-            resp = requests.get(url)
-            if resp.status_code != 200:
-                ext = ".webp"
-                url = (
-                    f"https://s3.amazonaws.com/cdn.hotglue.xyz/images"
-                    f"/logos/{service_name}{ext}"
-                )
-                resp = requests.get(url)
-                if resp.status_code != 200:
-                    print(f"Unable to find logo for {service_name}")
-                    return
-    with open(
-        f"{util.hub_root}/static/assets/logos/extractors/{service_name}{ext}", "wb"
-    ) as f:
-        f.write(resp.content)
-
-
-@app.command()
 def sdk_variants_as_csv():
     """
-    This command will generate a `sdk.csv` CSV file in the current directory containing the following columns:
+    Generate a `sdk.csv` CSV file in the current directory containing the following columns:
     plugin_type, name, variant, sdk
     """
     util = Utilities(True)
@@ -188,10 +208,10 @@ def get_variant_names(
     plugin_type: str = None,
 ):
     """
-    NOTE: USED FOR AUTOMATION ONLY
+    NOTE: USED FOR [AUTOMATION](https://github.com/meltano/hub/tree/main/.github/workflows) ONLY
 
-    This command will get all the variant names for a given set of filters.
-    The list will be formatted as escapped JSON to be used by Github Actions.
+    Generate a list of variant names for a given set of filters.
+    The list will be formatted as escaped JSON to be used by Github Actions.
     """
     formatted_output = []
     util = Utilities(True)
@@ -232,9 +252,9 @@ def extract_sdk_metadata_to_s3(
     output_dir: str,
 ):
     """
-    NOTE: USED FOR AUTOMATION ONLY
+    NOTE: USED FOR [AUTOMATION](https://github.com/meltano/hub/tree/main/.github/workflows) ONLY
 
-    This command will extract the SDK metadata for the given variants and upload them to S3.
+    Extract the SDK metadata for the given variants and upload them to S3.
     """
     util = Utilities(True)
     for yaml_file in variant_path_list.split(","):
@@ -272,9 +292,9 @@ def upload_airbyte(
     artifact_name: str,
 ):
     """
-    NOTE: USED FOR AUTOMATION ONLY
+    NOTE: USED FOR [AUTOMATION](https://github.com/meltano/hub/tree/main/.github/workflows) ONLY
 
-    This command will upload the given Airbyte artifacts to S3.
+    Upload the given Airbyte artifacts to S3.
     """
     util = Utilities(True)
     yaml_file = variant_path_list
@@ -302,9 +322,9 @@ def download_metadata(
     variant_path_list: str = None,
 ):
     """
-    NOTE: USED FOR AUTOMATION ONLY
+    NOTE: USED FOR [AUTOMATION](https://github.com/meltano/hub/tree/main/.github/workflows) ONLY
 
-    This command will download the latest metadata for the given variants from S3.
+    Download the latest metadata for the given variants from S3.
     """
     util = Utilities()
     s3 = S3()
@@ -324,9 +344,9 @@ def merge_metadata(
     variant_path_list: str = None,
 ):
     """
-    NOTE: USED FOR AUTOMATION ONLY
+    NOTE: USED FOR [AUTOMATION](https://github.com/meltano/hub/tree/main/.github/workflows) ONLY
 
-    This command will merge the latest SDK metadata from S3 with the existing hub
+    Merge the latest SDK metadata from S3 with the existing hub
     """
     if not variant_path_list:
         variant_path_list = ",".join(

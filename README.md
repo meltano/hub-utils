@@ -45,19 +45,24 @@ $ hub-utils [OPTIONS] COMMAND [ARGS]...
 
 **Commands**:
 
-* `add`
-* `add-airbyte`
-* `add-hotglue`
-* `download-metadata`: NOTE: USED FOR AUTOMATION ONLY
-* `extract-sdk-metadata-to-s3`: NOTE: USED FOR AUTOMATION ONLY
-* `get-variant-names`: NOTE: USED FOR AUTOMATION ONLY
-* `merge-metadata`: NOTE: USED FOR AUTOMATION ONLY
-* `sdk-variants-as-csv`: This command will generate a `sdk.csv` CSV...
-* `update-definition`
-* `update-quality`
-* `upload-airbyte`: NOTE: USED FOR AUTOMATION ONLY
+* `add`: Add a new tap or target to the hub.
+* `download-metadata`: NOTE: USED FOR...
+* `extract-sdk-metadata-to-s3`: NOTE: USED FOR...
+* `get-variant-names`: NOTE: USED FOR...
+* `merge-metadata`: NOTE: USED FOR...
+* `sdk-variants-as-csv`: Generate a `sdk.csv` CSV file in the...
+* `update-definition`: Update the definition of a tap or target...
+* `update-quality`: Update the quality of all taps and targets...
+* `upload-airbyte`: NOTE: USED FOR...
 
 ## `hub-utils add`
+
+Add a new tap or target to the hub.
+It will prompt you for any attributes that need input.
+
+If the plugin is SDK based it will do its best to install the plugin and scrape the settings for you.
+It will prompt you for any missing attributes. If its not SDK based it will prompt you for
+settings 1 at a time and help you by suggesting defaults that you can accept or override.
 
 **Usage**:
 
@@ -71,39 +76,11 @@ $ hub-utils add [OPTIONS]
 * `--auto-accept / --no-auto-accept`: [default: no-auto-accept]
 * `--help`: Show this message and exit.
 
-## `hub-utils add-airbyte`
-
-**Usage**:
-
-```console
-$ hub-utils add-airbyte [OPTIONS]
-```
-
-**Options**:
-
-* `--repo-url TEXT`
-* `--auto-accept / --no-auto-accept`: [default: no-auto-accept]
-* `--help`: Show this message and exit.
-
-## `hub-utils add-hotglue`
-
-**Usage**:
-
-```console
-$ hub-utils add-hotglue [OPTIONS]
-```
-
-**Options**:
-
-* `--repo-url TEXT`
-* `--auto-accept / --no-auto-accept`: [default: no-auto-accept]
-* `--help`: Show this message and exit.
-
 ## `hub-utils download-metadata`
 
-NOTE: USED FOR AUTOMATION ONLY
+NOTE: USED FOR [AUTOMATION](https://github.com/meltano/hub/tree/main/.github/workflows) ONLY
 
-This command will download the latest metadata for the given variants from S3.
+Download the latest metadata for the given variants from S3.
 
 **Usage**:
 
@@ -122,9 +99,9 @@ $ hub-utils download-metadata [OPTIONS] LOCAL_PATH
 
 ## `hub-utils extract-sdk-metadata-to-s3`
 
-NOTE: USED FOR AUTOMATION ONLY
+NOTE: USED FOR [AUTOMATION](https://github.com/meltano/hub/tree/main/.github/workflows) ONLY
 
-This command will extract the SDK metadata for the given variants and upload them to S3.
+Extract the SDK metadata for the given variants and upload them to S3.
 
 **Usage**:
 
@@ -143,10 +120,10 @@ $ hub-utils extract-sdk-metadata-to-s3 [OPTIONS] VARIANT_PATH_LIST OUTPUT_DIR
 
 ## `hub-utils get-variant-names`
 
-NOTE: USED FOR AUTOMATION ONLY
+NOTE: USED FOR [AUTOMATION](https://github.com/meltano/hub/tree/main/.github/workflows) ONLY
 
-This command will get all the variant names for a given set of filters.
-The list will be formatted as escapped JSON to be used by Github Actions.
+Generate a list of variant names for a given set of filters.
+The list will be formatted as escaped JSON to be used by Github Actions.
 
 **Usage**:
 
@@ -166,9 +143,9 @@ $ hub-utils get-variant-names [OPTIONS] HUB_ROOT
 
 ## `hub-utils merge-metadata`
 
-NOTE: USED FOR AUTOMATION ONLY
+NOTE: USED FOR [AUTOMATION](https://github.com/meltano/hub/tree/main/.github/workflows) ONLY
 
-This command will merge the latest SDK metadata from S3 with the existing hub
+Merge the latest SDK metadata from S3 with the existing hub
 
 **Usage**:
 
@@ -188,7 +165,7 @@ $ hub-utils merge-metadata [OPTIONS] HUB_ROOT LOCAL_PATH
 
 ## `hub-utils sdk-variants-as-csv`
 
-This command will generate a `sdk.csv` CSV file in the current directory containing the following columns:
+Generate a `sdk.csv` CSV file in the current directory containing the following columns:
 plugin_type, name, variant, sdk
 
 **Usage**:
@@ -202,6 +179,13 @@ $ hub-utils sdk-variants-as-csv [OPTIONS]
 * `--help`: Show this message and exit.
 
 ## `hub-utils update-definition`
+
+Update the definition of a tap or target in the hub.
+
+Similar to the `add` command it will try to auto update using SDK settings or prompt you for input.
+When merging it will use the following rules:
+- if SDK setting description is empty it prefers the existing description
+- if the existing description longer than the scraped setting and has new lines then its likely manually overridden on the hub so prefer that one.
 
 **Usage**:
 
@@ -217,6 +201,12 @@ $ hub-utils update-definition [OPTIONS]
 * `--help`: Show this message and exit.
 
 ## `hub-utils update-quality`
+
+Update the quality of all taps and targets on the hub.
+
+This command accepts a path to the
+[variant_metrics.yml](https://github.com/meltano/hub/blob/main/_data/variant_metrics.yml)
+yaml file, make sure its the most up to date version likely sourced from S3.
 
 **Usage**:
 
@@ -234,9 +224,9 @@ $ hub-utils update-quality [OPTIONS] METRICS_FILE_PATH
 
 ## `hub-utils upload-airbyte`
 
-NOTE: USED FOR AUTOMATION ONLY
+NOTE: USED FOR [AUTOMATION](https://github.com/meltano/hub/tree/main/.github/workflows) ONLY
 
-This command will upload the given Airbyte artifacts to S3.
+Upload the given Airbyte artifacts to S3.
 
 **Usage**:
 
