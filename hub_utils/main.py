@@ -38,7 +38,37 @@ SDK_SUFFIX_LIST = [
 @app.callback()
 def callback():
     """
-    MeltanoHub Utilities
+    MeltanoHub Utilities - A utility CLI intended to streamline the steps needed to add Singer taps/targets to [MeltanoHub](https://hub.meltano.com/).
+
+    ## Installation
+
+    ```
+    export HUB_ROOT_PATH='/Users/meltano/hub'
+
+    poetry install
+    poetry run hub-utils --help
+    ```
+
+    ## Tests
+
+    ```bash
+    poetry run pytest -v
+
+    poetry run pytest -v tests/test_core.py::test_sdk_about_parsing_1
+    ```
+
+    ## Refreshing This README
+
+    The CLI is auto documenting so put all content in the CLI modules
+    and this will use [typer-cli](https://typer.tiangolo.com/typer-cli/) utilities
+    to render them as markdown.
+
+    Run the following command:
+
+    ```bash
+    poetry run typer hub_utils/main.py utils docs --name hub-utils --output README.md
+    ```
+
     """
 
 
