@@ -1,7 +1,7 @@
 # `hub-utils`
 
-[MeltanoHub](https://hub.meltano.com/) Utilities - A utility CLI intended to streamline the
-work needed to maintain MeltanoHub.
+[MeltanoHub](https://hub.meltano.com/) Utilities - A utility CLI intended
+to streamline the work needed to maintain MeltanoHub.
 
 **Installation**
 
@@ -61,9 +61,10 @@ $ hub-utils [OPTIONS] COMMAND [ARGS]...
 Add a new tap or target to the hub.
 It will prompt you for any attributes that need input.
 
-If the plugin is SDK based it will do its best to install the plugin and scrape the settings for you.
-It will prompt you for any missing attributes. If its not SDK based it will prompt you for
-settings 1 at a time and help you by suggesting defaults that you can accept or override.
+If the plugin is SDK based it will do its best to install the plugin and scrape
+the settings for you. It will prompt you for any missing attributes. If its not
+SDK based it will prompt you for settings 1 at a time and help you by suggesting
+defaults that you can accept or override.
 
 **Usage**:
 
@@ -79,8 +80,8 @@ $ hub-utils add [OPTIONS]
 
 ## `hub-utils download-metadata`
 
-NOTE: USED FOR [AUTOMATION](https://github.com/meltano/hub/tree/main/.github/workflows) ONLY
-
+NOTE: USED FOR
+[AUTOMATION](https://github.com/meltano/hub/tree/main/.github/workflows) ONLY
 Download the latest metadata for the given variants from S3.
 
 **Usage**:
@@ -100,7 +101,8 @@ $ hub-utils download-metadata [OPTIONS] LOCAL_PATH
 
 ## `hub-utils extract-sdk-metadata-to-s3`
 
-NOTE: USED FOR [AUTOMATION](https://github.com/meltano/hub/tree/main/.github/workflows) ONLY
+NOTE: USED FOR
+[AUTOMATION](https://github.com/meltano/hub/tree/main/.github/workflows) ONLY
 
 Extract the SDK metadata for the given variants and upload them to S3.
 
@@ -121,7 +123,8 @@ $ hub-utils extract-sdk-metadata-to-s3 [OPTIONS] VARIANT_PATH_LIST OUTPUT_DIR
 
 ## `hub-utils get-variant-names`
 
-NOTE: USED FOR [AUTOMATION](https://github.com/meltano/hub/tree/main/.github/workflows) ONLY
+NOTE: USED FOR
+[AUTOMATION](https://github.com/meltano/hub/tree/main/.github/workflows) ONLY
 
 Generate a list of variant names for a given set of filters.
 The list will be formatted as escaped JSON to be used by Github Actions.
@@ -144,7 +147,8 @@ $ hub-utils get-variant-names [OPTIONS] HUB_ROOT
 
 ## `hub-utils merge-metadata`
 
-NOTE: USED FOR [AUTOMATION](https://github.com/meltano/hub/tree/main/.github/workflows) ONLY
+NOTE: USED FOR
+[AUTOMATION](https://github.com/meltano/hub/tree/main/.github/workflows) ONLY
 
 Merge the latest SDK metadata from S3 with the existing hub
 
@@ -166,7 +170,8 @@ $ hub-utils merge-metadata [OPTIONS] HUB_ROOT LOCAL_PATH
 
 ## `hub-utils sdk-variants-as-csv`
 
-Generate a `sdk.csv` CSV file in the current directory containing the following columns:
+Generate a `sdk.csv` CSV file in the current directory containing the following
+columns:
 plugin_type, name, variant, sdk
 
 **Usage**:
@@ -183,10 +188,11 @@ $ hub-utils sdk-variants-as-csv [OPTIONS]
 
 Update the definition of a tap or target in the hub.
 
-Similar to the `add` command it will try to auto update using SDK settings or prompt you for input.
-When merging it will use the following rules:
+Similar to the `add` command it will try to auto update using SDK settings or prompt
+you for input. When merging it will use the following rules:
 - if SDK setting description is empty it prefers the existing description
-- if the existing description longer than the scraped setting and has new lines then its likely manually overridden on the hub so prefer that one.
+- if the existing description longer than the scraped setting and has new lines
+    then its likely manually overridden on the hub so prefer that one.
 
 **Usage**:
 
@@ -205,8 +211,8 @@ $ hub-utils update-definition [OPTIONS]
 
 Update the quality of all taps and targets on the hub.
 
-This command accepts a path to the
-[variant_metrics.yml](https://github.com/meltano/hub/blob/main/_data/variant_metrics.yml)
+This command accepts a path to the [variant_metrics.yml]
+(https://github.com/meltano/hub/blob/main/_data/variant_metrics.yml)
 yaml file, make sure its the most up to date version likely sourced from S3.
 
 **Usage**:
@@ -225,7 +231,8 @@ $ hub-utils update-quality [OPTIONS] METRICS_FILE_PATH
 
 ## `hub-utils upload-airbyte`
 
-NOTE: USED FOR [AUTOMATION](https://github.com/meltano/hub/tree/main/.github/workflows) ONLY
+NOTE: USED FOR
+[AUTOMATION](https://github.com/meltano/hub/tree/main/.github/workflows) ONLY
 
 Upload the given Airbyte artifacts to S3.
 

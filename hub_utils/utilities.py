@@ -1,6 +1,5 @@
 import ast
 import csv
-import hashlib
 import json
 import os
 import shutil

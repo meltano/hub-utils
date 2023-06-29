@@ -38,8 +38,8 @@ SDK_SUFFIX_LIST = [
 @app.callback()
 def callback():
     """
-    [MeltanoHub](https://hub.meltano.com/) Utilities - A utility CLI intended to streamline the
-    work needed to maintain MeltanoHub.
+    [MeltanoHub](https://hub.meltano.com/) Utilities - A utility CLI intended
+    to streamline the work needed to maintain MeltanoHub.
 
     **Installation**
 
@@ -79,9 +79,10 @@ def add(repo_url: str = None, auto_accept: bool = typer.Option(False)):
     Add a new tap or target to the hub.
     It will prompt you for any attributes that need input.
 
-    If the plugin is SDK based it will do its best to install the plugin and scrape the settings for you.
-    It will prompt you for any missing attributes. If its not SDK based it will prompt you for
-    settings 1 at a time and help you by suggesting defaults that you can accept or override.
+    If the plugin is SDK based it will do its best to install the plugin and scrape
+    the settings for you. It will prompt you for any missing attributes. If its not
+    SDK based it will prompt you for settings 1 at a time and help you by suggesting
+    defaults that you can accept or override.
     """
     util = Utilities(auto_accept)
     if "airbytehq/airbyte" in repo_url:
@@ -96,11 +97,17 @@ def add(repo_url: str = None, auto_accept: bool = typer.Option(False)):
             name = repo_url.split("/")[-1]
             service_name = name.replace("tap-", "").replace("target-", "")
             ext = ".svg"
-            url = f"https://s3.amazonaws.com/cdn.hotglue.xyz/images/logos/{service_name}{ext}"
+            url = (
+                "https://s3.amazonaws.com/cdn.hotglue.xyz/"
+                f"images/logos/{service_name}{ext}"
+            )
             resp = requests.get(url)
             if resp.status_code != 200:
                 ext = ".png"
-                url = f"https://s3.amazonaws.com/cdn.hotglue.xyz/images/logos/{service_name}{ext}"
+                url = (
+                    f"https://s3.amazonaws.com/cdn.hotglue.xyz/images/"
+                    f"logos/{service_name}{ext}"
+                )
                 resp = requests.get(url)
                 if resp.status_code != 200:
                     ext = ".jpeg"
@@ -135,10 +142,11 @@ def update_definition(
     """
     Update the definition of a tap or target in the hub.
 
-    Similar to the `add` command it will try to auto update using SDK settings or prompt you for input.
-    When merging it will use the following rules:
+    Similar to the `add` command it will try to auto update using SDK settings or prompt
+    you for input. When merging it will use the following rules:
     - if SDK setting description is empty it prefers the existing description
-    - if the existing description longer than the scraped setting and has new lines then its likely manually overridden on the hub so prefer that one.
+    - if the existing description longer than the scraped setting and has new lines
+        then its likely manually overridden on the hub so prefer that one.
     """
     util = Utilities(auto_accept)
     if util._prompt("is_meltano_sdk", True, type=bool):
@@ -154,8 +162,8 @@ def update_quality(
     """
     Update the quality of all taps and targets on the hub.
 
-    This command accepts a path to the
-    [variant_metrics.yml](https://github.com/meltano/hub/blob/main/_data/variant_metrics.yml)
+    This command accepts a path to the [variant_metrics.yml]
+    (https://github.com/meltano/hub/blob/main/_data/variant_metrics.yml)
     yaml file, make sure its the most up to date version likely sourced from S3.
     """
     util = Utilities(True)
@@ -180,7 +188,8 @@ def update_quality(
 @app.command()
 def sdk_variants_as_csv():
     """
-    Generate a `sdk.csv` CSV file in the current directory containing the following columns:
+    Generate a `sdk.csv` CSV file in the current directory containing the following
+    columns:
     plugin_type, name, variant, sdk
     """
     util = Utilities(True)
@@ -207,7 +216,8 @@ def get_variant_names(
     plugin_type: str = None,
 ):
     """
-    NOTE: USED FOR [AUTOMATION](https://github.com/meltano/hub/tree/main/.github/workflows) ONLY
+    NOTE: USED FOR
+    [AUTOMATION](https://github.com/meltano/hub/tree/main/.github/workflows) ONLY
 
     Generate a list of variant names for a given set of filters.
     The list will be formatted as escaped JSON to be used by Github Actions.
@@ -251,7 +261,8 @@ def extract_sdk_metadata_to_s3(
     output_dir: str,
 ):
     """
-    NOTE: USED FOR [AUTOMATION](https://github.com/meltano/hub/tree/main/.github/workflows) ONLY
+    NOTE: USED FOR
+    [AUTOMATION](https://github.com/meltano/hub/tree/main/.github/workflows) ONLY
 
     Extract the SDK metadata for the given variants and upload them to S3.
     """
@@ -291,7 +302,8 @@ def upload_airbyte(
     artifact_name: str,
 ):
     """
-    NOTE: USED FOR [AUTOMATION](https://github.com/meltano/hub/tree/main/.github/workflows) ONLY
+    NOTE: USED FOR
+    [AUTOMATION](https://github.com/meltano/hub/tree/main/.github/workflows) ONLY
 
     Upload the given Airbyte artifacts to S3.
     """
@@ -321,8 +333,8 @@ def download_metadata(
     variant_path_list: str = None,
 ):
     """
-    NOTE: USED FOR [AUTOMATION](https://github.com/meltano/hub/tree/main/.github/workflows) ONLY
-
+    NOTE: USED FOR
+    [AUTOMATION](https://github.com/meltano/hub/tree/main/.github/workflows) ONLY
     Download the latest metadata for the given variants from S3.
     """
     util = Utilities()
@@ -343,7 +355,8 @@ def merge_metadata(
     variant_path_list: str = None,
 ):
     """
-    NOTE: USED FOR [AUTOMATION](https://github.com/meltano/hub/tree/main/.github/workflows) ONLY
+    NOTE: USED FOR
+    [AUTOMATION](https://github.com/meltano/hub/tree/main/.github/workflows) ONLY
 
     Merge the latest SDK metadata from S3 with the existing hub
     """
