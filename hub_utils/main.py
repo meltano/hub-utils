@@ -100,9 +100,7 @@ def add(repo_url: str = None, auto_accept: bool = typer.Option(False)):
             resp = requests.get(url)
             if resp.status_code != 200:
                 ext = ".png"
-                url = (
-                    f"https://s3.amazonaws.com/cdn.hotglue.xyz/images/logos/{service_name}{ext}"
-                )
+                url = f"https://s3.amazonaws.com/cdn.hotglue.xyz/images/logos/{service_name}{ext}"
                 resp = requests.get(url)
                 if resp.status_code != 200:
                     ext = ".jpeg"
@@ -122,10 +120,10 @@ def add(repo_url: str = None, auto_accept: bool = typer.Option(False)):
                             print(f"Unable to find logo for {service_name}")
                             return
             with open(
-                f"{util.hub_root}/static/assets/logos/extractors/{service_name}{ext}", "wb"
+                f"{util.hub_root}/static/assets/logos/extractors/{service_name}{ext}",
+                "wb",
             ) as f:
                 f.write(resp.content)
-
 
 
 @app.command()
