@@ -8,7 +8,7 @@ packages = [{include = "hub_utils"}]
 
 [tool.poetry.dependencies]
 python = ">=3.8.1,<3.11"
-typer = {extras = ["all"], version = "^0.6.1"}
+typer = {extras = ["all"], version = "^0.7.0"}
 ruamel-yaml = "^0.17.21"
 yamllint = "^1.28.0"
 boto3 = "^1.26.96"
