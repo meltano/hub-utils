@@ -462,30 +462,6 @@ class Utilities:
                     continue
                 writer.writerow(row)
 
-    def add_bulk(self, csv_path: str):
-        edit_path = csv_path.split(".csv")[0] + "_edit.csv"
-        csv_list = []
-        repo_urls_to_delete = []
-        with open(csv_path, "r") as inp:
-            csv_list = [row for row in csv.reader(inp)]
-        for index, row in enumerate(csv_list):
-            if index == 0:
-                print(f"Skipping header {row}")
-                continue
-            repo_url = row[0]
-            plugin_definition = json.loads(row[5])
-            name_hash = hashlib.sha256(
-                self._get_plugin_name(repo_url).encode()
-            ).hexdigest()
-            do_add = self._prompt(
-                f"Add {repo_url} - {name_hash}?", default_val=True, type=bool
-            )
-            if do_add:
-                self.add(repo_url, definition_seed=plugin_definition)
-                self._prompt("Pausing to commit changes...hit any key to continue")
-            repo_urls_to_delete.append(repo_url)
-            self.delete_rows(repo_urls_to_delete, edit_path, csv_path)
-
     def _retrieve_def(self, plugin_name, plugin_variant, plugin_type):
         def_path = (
             f"{self.hub_root}/_data/meltano"
