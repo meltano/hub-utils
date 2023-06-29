@@ -79,25 +79,16 @@ def add(repo_url: str = None, auto_accept: bool = typer.Option(False)):
 
 
 @app.command()
-def add_bulk(csv_path: str, auto_accept: bool = typer.Option(False)):
-    util = Utilities(auto_accept)
-    util.add_bulk(csv_path)
-
-
-@app.command()
-def update(repo_url: str = None, auto_accept: bool = typer.Option(False)):
-    util = Utilities(auto_accept)
-    util.update(repo_url)
-
-
-@app.command()
-def update_sdk(
+def update_definition(
     repo_url: str = None,
     plugin_name: str = None,
     auto_accept: bool = typer.Option(False),
 ):
     util = Utilities(auto_accept)
-    util.update_sdk(repo_url, plugin_name)
+    if util._prompt("is_meltano_sdk", True, type=bool):
+        util.update_sdk(repo_url, plugin_name)
+    else:
+        util.update(repo_url)
 
 
 @app.command()
