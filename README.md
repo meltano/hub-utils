@@ -49,13 +49,10 @@ $ hub-utils [OPTIONS] COMMAND [ARGS]...
 * `add-airbyte`
 * `add-hotglue`
 * `download-metadata`: NOTE: USED FOR AUTOMATION ONLY
-* `extract-metadata`
 * `extract-sdk-metadata-to-s3`: NOTE: USED FOR AUTOMATION ONLY
 * `get-variant-names`: NOTE: USED FOR AUTOMATION ONLY
 * `merge-metadata`: NOTE: USED FOR AUTOMATION ONLY
-* `refresh-sdk-variants`
 * `sdk-variants-as-csv`: This command will generate a `sdk.csv` CSV...
-* `translate-sdk`
 * `update-definition`
 * `update-quality`
 * `upload-airbyte`: NOTE: USED FOR AUTOMATION ONLY
@@ -121,23 +118,6 @@ $ hub-utils download-metadata [OPTIONS] LOCAL_PATH
 **Options**:
 
 * `--variant-path-list TEXT`
-* `--help`: Show this message and exit.
-
-## `hub-utils extract-metadata`
-
-**Usage**:
-
-```console
-$ hub-utils extract-metadata [OPTIONS] OUTPUT_DIR
-```
-
-**Arguments**:
-
-* `OUTPUT_DIR`: [required]
-
-**Options**:
-
-* `--starting-yaml TEXT`
 * `--help`: Show this message and exit.
 
 ## `hub-utils extract-sdk-metadata-to-s3`
@@ -206,19 +186,6 @@ $ hub-utils merge-metadata [OPTIONS] HUB_ROOT LOCAL_PATH
 * `--variant-path-list TEXT`
 * `--help`: Show this message and exit.
 
-## `hub-utils refresh-sdk-variants`
-
-**Usage**:
-
-```console
-$ hub-utils refresh-sdk-variants [OPTIONS]
-```
-
-**Options**:
-
-* `--starting-yaml TEXT`
-* `--help`: Show this message and exit.
-
 ## `hub-utils sdk-variants-as-csv`
 
 This command will generate a `sdk.csv` CSV file in the current directory containing the following columns:
@@ -229,23 +196,6 @@ plugin_type, name, variant, sdk
 ```console
 $ hub-utils sdk-variants-as-csv [OPTIONS]
 ```
-
-**Options**:
-
-* `--help`: Show this message and exit.
-
-## `hub-utils translate-sdk`
-
-**Usage**:
-
-```console
-$ hub-utils translate-sdk [OPTIONS] VARIANT_PATH_LIST SDK_OUTPUT_PATH
-```
-
-**Arguments**:
-
-* `VARIANT_PATH_LIST`: [required]
-* `SDK_OUTPUT_PATH`: [required]
 
 **Options**:
 
