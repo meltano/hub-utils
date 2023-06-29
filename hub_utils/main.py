@@ -38,7 +38,8 @@ SDK_SUFFIX_LIST = [
 @app.callback()
 def callback():
     """
-    MeltanoHub Utilities - A utility CLI intended to streamline the steps needed to add Singer taps/targets to [MeltanoHub](https://hub.meltano.com/).
+    [MeltanoHub](https://hub.meltano.com/) Utilities - A utility CLI intended to streamline the
+    work needed to maintain MeltanoHub.
 
     **Installation**
 
