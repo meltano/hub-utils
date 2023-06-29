@@ -159,7 +159,11 @@ def add_hotglue(repo_url: str = None, auto_accept: bool = typer.Option(False)):
 
 
 @app.command()
-def sdk_variants_csv():
+def sdk_variants_as_csv():
+    """
+    This command will generate a `sdk.csv` CSV file in the current directory containing the following columns:
+    plugin_type, name, variant, sdk
+    """
     util = Utilities(True)
     base_repo_path = os.path.dirname(os.path.dirname(__file__))
     with open(f"{base_repo_path}/sdk.csv", "w") as csvfile:

@@ -54,7 +54,7 @@ $ hub-utils [OPTIONS] COMMAND [ARGS]...
 * `get-variant-names`
 * `merge-metadata`
 * `refresh-sdk-variants`
-* `sdk-variants-csv`
+* `sdk-variants-as-csv`: This command will generate a `sdk.csv` CSV...
 * `translate-sdk`
 * `update-definition`
 * `update-quality`
@@ -202,12 +202,15 @@ $ hub-utils refresh-sdk-variants [OPTIONS]
 * `--starting-yaml TEXT`
 * `--help`: Show this message and exit.
 
-## `hub-utils sdk-variants-csv`
+## `hub-utils sdk-variants-as-csv`
+
+This command will generate a `sdk.csv` CSV file in the current directory containing the following columns:
+plugin_type, name, variant, sdk
 
 **Usage**:
 
 ```console
-$ hub-utils sdk-variants-csv [OPTIONS]
+$ hub-utils sdk-variants-as-csv [OPTIONS]
 ```
 
 **Options**:
