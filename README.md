@@ -2,7 +2,7 @@
 
 MeltanoHub Utilities - A utility CLI intended to streamline the steps needed to add Singer taps/targets to [MeltanoHub](https://hub.meltano.com/).
 
-## Installation
+**Installation**
 
 ```
 export HUB_ROOT_PATH='/Users/meltano/hub'
@@ -11,7 +11,7 @@ poetry install
 poetry run hub-utils --help
 ```
 
-## Tests
+**Tests**
 
 ```bash
 poetry run pytest -v
@@ -19,7 +19,7 @@ poetry run pytest -v
 poetry run pytest -v tests/test_core.py::test_sdk_about_parsing_1
 ```
 
-## Refreshing This README
+**Refreshing This README**
 
 The CLI is auto documenting so put all content in the CLI modules
 and this will use [typer-cli](https://typer.tiangolo.com/typer-cli/) utilities
@@ -54,7 +54,7 @@ $ hub-utils [OPTIONS] COMMAND [ARGS]...
 * `get-variant-names`
 * `merge-metadata`
 * `refresh-sdk-variants`
-* `sdk-variants-as-csv`
+* `sdk-variants-csv`
 * `translate-sdk`
 * `update-definition`
 * `update-quality`
@@ -202,12 +202,12 @@ $ hub-utils refresh-sdk-variants [OPTIONS]
 * `--starting-yaml TEXT`
 * `--help`: Show this message and exit.
 
-## `hub-utils sdk-variants-as-csv`
+## `hub-utils sdk-variants-csv`
 
 **Usage**:
 
 ```console
-$ hub-utils sdk-variants-as-csv [OPTIONS]
+$ hub-utils sdk-variants-csv [OPTIONS]
 ```
 
 **Options**:

@@ -40,7 +40,7 @@ def callback():
     """
     MeltanoHub Utilities - A utility CLI intended to streamline the steps needed to add Singer taps/targets to [MeltanoHub](https://hub.meltano.com/).
 
-    ## Installation
+    **Installation**
 
     ```
     export HUB_ROOT_PATH='/Users/meltano/hub'
@@ -49,7 +49,7 @@ def callback():
     poetry run hub-utils --help
     ```
 
-    ## Tests
+    **Tests**
 
     ```bash
     poetry run pytest -v
@@ -57,7 +57,7 @@ def callback():
     poetry run pytest -v tests/test_core.py::test_sdk_about_parsing_1
     ```
 
-    ## Refreshing This README
+    **Refreshing This README**
 
     The CLI is auto documenting so put all content in the CLI modules
     and this will use [typer-cli](https://typer.tiangolo.com/typer-cli/) utilities
