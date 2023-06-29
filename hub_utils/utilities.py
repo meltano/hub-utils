@@ -62,7 +62,7 @@ class Utilities:
         self.yaml = YAML()
         self.auto_accept = auto_accept
         self.hub_root = os.getenv(
-            "HUB_ROOT_PATH", "/Users/pnadolny/Documents/Git/GitHub/meltano/hub"
+            "HUB_ROOT_PATH"
         )
         self.default_variants_path = f"{self.hub_root}/_data/default_variants.yml"
         self.maintainers_path = f"{self.hub_root}/_data/maintainers.yml"
@@ -692,11 +692,3 @@ class Utilities:
     def get_suffix(yaml_file):
         p_type, p_name, p_variant = os.path.splitext(yaml_file)[0].split("/")[-3:]
         return f"{p_type}/{p_name}/{p_variant}"
-
-
-if __name__ == "__main__":
-    util = Utilities(False)
-    util.add_airbyte()
-    # util.update_sdk("https://github.com/MeltanoLabs/tap-snowflake")
-    # util.update_sdk("https://github.com/hotgluexyz/tap-procore")
-    # util.add_bulk('/Users/pnadolny/Documents/Git/GitHub/pnadolny/hub-utils/other_scripts/export_edit.csv')
