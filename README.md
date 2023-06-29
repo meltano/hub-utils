@@ -48,17 +48,17 @@ $ hub-utils [OPTIONS] COMMAND [ARGS]...
 * `add`
 * `add-airbyte`
 * `add-hotglue`
-* `download-metadata`
+* `download-metadata`: NOTE: USED FOR AUTOMATION ONLY
 * `extract-metadata`
-* `extract-sdk-metadata-to-s3`
-* `get-variant-names`
-* `merge-metadata`
+* `extract-sdk-metadata-to-s3`: NOTE: USED FOR AUTOMATION ONLY
+* `get-variant-names`: NOTE: USED FOR AUTOMATION ONLY
+* `merge-metadata`: NOTE: USED FOR AUTOMATION ONLY
 * `refresh-sdk-variants`
 * `sdk-variants-as-csv`: This command will generate a `sdk.csv` CSV...
 * `translate-sdk`
 * `update-definition`
 * `update-quality`
-* `upload-airbyte`
+* `upload-airbyte`: NOTE: USED FOR AUTOMATION ONLY
 
 ## `hub-utils add`
 
@@ -104,6 +104,10 @@ $ hub-utils add-hotglue [OPTIONS]
 
 ## `hub-utils download-metadata`
 
+NOTE: USED FOR AUTOMATION ONLY
+
+This command will download the latest metadata for the given variants from S3.
+
 **Usage**:
 
 ```console
@@ -138,6 +142,10 @@ $ hub-utils extract-metadata [OPTIONS] OUTPUT_DIR
 
 ## `hub-utils extract-sdk-metadata-to-s3`
 
+NOTE: USED FOR AUTOMATION ONLY
+
+This command will extract the SDK metadata for the given variants and upload them to S3.
+
 **Usage**:
 
 ```console
@@ -154,6 +162,11 @@ $ hub-utils extract-sdk-metadata-to-s3 [OPTIONS] VARIANT_PATH_LIST OUTPUT_DIR
 * `--help`: Show this message and exit.
 
 ## `hub-utils get-variant-names`
+
+NOTE: USED FOR AUTOMATION ONLY
+
+This command will get all the variant names for a given set of filters.
+The list will be formatted as escapped JSON to be used by Github Actions.
 
 **Usage**:
 
@@ -172,6 +185,10 @@ $ hub-utils get-variant-names [OPTIONS] HUB_ROOT
 * `--help`: Show this message and exit.
 
 ## `hub-utils merge-metadata`
+
+NOTE: USED FOR AUTOMATION ONLY
+
+This command will merge the latest SDK metadata from S3 with the existing hub
 
 **Usage**:
 
@@ -266,6 +283,10 @@ $ hub-utils update-quality [OPTIONS] METRICS_FILE_PATH
 * `--help`: Show this message and exit.
 
 ## `hub-utils upload-airbyte`
+
+NOTE: USED FOR AUTOMATION ONLY
+
+This command will upload the given Airbyte artifacts to S3.
 
 **Usage**:
 

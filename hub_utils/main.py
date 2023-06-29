@@ -245,6 +245,12 @@ def get_variant_names(
     # comma separated list
     plugin_type: str = None,
 ):
+    """
+    NOTE: USED FOR AUTOMATION ONLY
+
+    This command will get all the variant names for a given set of filters.
+    The list will be formatted as escapped JSON to be used by Github Actions.
+    """
     formatted_output = []
     util = Utilities(True)
     for yaml_file in find_all_yamls(f_path=f"{hub_root}/_data/meltano/"):
@@ -283,6 +289,11 @@ def extract_sdk_metadata_to_s3(
     variant_path_list: str,
     output_dir: str,
 ):
+    """
+    NOTE: USED FOR AUTOMATION ONLY
+
+    This command will extract the SDK metadata for the given variants and upload them to S3.
+    """
     util = Utilities(True)
     for yaml_file in variant_path_list.split(","):
         data = util._read_yaml(yaml_file)
@@ -318,6 +329,11 @@ def upload_airbyte(
     variant_path_list: str,
     artifact_name: str,
 ):
+    """
+    NOTE: USED FOR AUTOMATION ONLY
+
+    This command will upload the given Airbyte artifacts to S3.
+    """
     util = Utilities(True)
     yaml_file = variant_path_list
     for yaml_file in variant_path_list.split(","):
@@ -379,6 +395,11 @@ def download_metadata(
     local_path: str,
     variant_path_list: str = None,
 ):
+    """
+    NOTE: USED FOR AUTOMATION ONLY
+
+    This command will download the latest metadata for the given variants from S3.
+    """
     util = Utilities()
     s3 = S3()
     if not variant_path_list:
@@ -396,6 +417,11 @@ def merge_metadata(
     local_path: str,
     variant_path_list: str = None,
 ):
+    """
+    NOTE: USED FOR AUTOMATION ONLY
+
+    This command will merge the latest SDK metadata from S3 with the existing hub
+    """
     if not variant_path_list:
         variant_path_list = ",".join(
             [f"{hub_root}/_data/meltano/{suffix}.yml" for suffix in SDK_SUFFIX_LIST]
