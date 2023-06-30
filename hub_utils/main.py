@@ -1,20 +1,18 @@
-from copy import copy
 import csv
 import hashlib
 import json
 import os
 from copy import copy
 from datetime import datetime
-
+from enum import Enum
 
 import requests
 import typer
-from enum import Enum
 
 from hub_utils.meltano_util import MeltanoUtil
 from hub_utils.s3 import S3
 from hub_utils.utilities import Utilities
-from hub_utils.yaml_lint import find_all_yamls, run_yamllint, fix_yaml
+from hub_utils.yaml_lint import find_all_yamls, fix_yaml, run_yamllint
 
 app = typer.Typer()
 
