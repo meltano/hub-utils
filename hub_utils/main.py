@@ -87,6 +87,8 @@ def add(repo_url: str = None, auto_accept: bool = typer.Option(False)):
     defaults that you can accept or override.
     """
     util = Utilities(auto_accept)
+    if not repo_url:
+        repo_url = util._prompt("repo_url")
     if "airbytehq/airbyte" in repo_url:
         if util._prompt("Is this an Airbyte variant?", True, type=bool):
             util.add_airbyte(repo_url)
@@ -186,7 +188,7 @@ def update_quality(
             data["variant"], is_sdk_based, usage_count, responsiveness
         )
         if orig_quality != data["quality"]:
-            util._write_yaml(yaml_file, data)
+            util._write_yaml(yaml_file, data, reformat=True)
 
 
 @app.command()
