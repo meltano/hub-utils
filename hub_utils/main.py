@@ -9,11 +9,12 @@ from datetime import datetime
 
 import requests
 import typer
+from enum import Enum
 
 from hub_utils.meltano_util import MeltanoUtil
 from hub_utils.s3 import S3
 from hub_utils.utilities import Utilities
-from hub_utils.yaml_lint import find_all_yamls
+from hub_utils.yaml_lint import find_all_yamls, run_yamllint, fix_yaml
 
 app = typer.Typer()
 
@@ -75,6 +76,26 @@ def callback():
 
     """
 
+class YamlLint(str, Enum):
+    fix = "fix"
+    lint = "lint"
+
+
+@app.command()
+def yamllint(action: YamlLint, path: str):
+    """
+    Run yamllint on all yamls in the hub or a specific path.
+    """
+    if path:
+        paths = [path]
+    else:
+        paths = list(find_all_yamls())
+    
+    for path in paths:
+        if action == YamlLint.lint:
+            run_yamllint(path)
+        elif action == YamlLint.fix:
+            fix_yaml(path)
 
 @app.command()
 def add(repo_url: str = None, auto_accept: bool = typer.Option(False)):
