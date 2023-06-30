@@ -74,6 +74,7 @@ def callback():
 
     """
 
+
 class YamlLint(str, Enum):
     fix = "fix"
     lint = "lint"
@@ -88,12 +89,13 @@ def yamllint(action: YamlLint, path: str):
         paths = [path]
     else:
         paths = list(find_all_yamls())
-    
+
     for path in paths:
         if action == YamlLint.lint:
             run_yamllint(path)
         elif action == YamlLint.fix:
             fix_yaml(path)
+
 
 @app.command()
 def add(repo_url: str = None, auto_accept: bool = typer.Option(False)):
