@@ -1,8 +1,10 @@
+from copy import copy
 import csv
 import hashlib
 import json
 import os
 from datetime import datetime
+
 
 import requests
 import typer
@@ -177,12 +179,14 @@ def update_quality(
         if "keywords" in data and "meltano_sdk" in data.get("keywords"):
             is_sdk_based = True
         usage_count = usage_metrics.get(data["repo"], {}).get("all_projects", 0)
+        orig_quality = copy(data["quality"])
         # TODO: Calculate responsiveness
         responsiveness = "high"
         data["quality"] = MeltanoUtil.get_quality(
             data["variant"], is_sdk_based, usage_count, responsiveness
         )
-        util._write_yaml(yaml_file, data)
+        if orig_quality != data["quality"]:
+            util._write_yaml(yaml_file, data)
 
 
 @app.command()
