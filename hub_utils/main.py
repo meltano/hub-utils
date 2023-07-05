@@ -5,10 +5,10 @@ import os
 from copy import copy
 from datetime import datetime
 from enum import Enum
+from typing import List
 
 import requests
 import typer
-from typing import List
 
 from hub_utils.meltano_util import MeltanoUtil
 from hub_utils.s3 import S3
