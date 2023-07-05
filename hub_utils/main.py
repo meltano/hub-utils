@@ -8,6 +8,7 @@ from enum import Enum
 
 import requests
 import typer
+from typing import List
 
 from hub_utils.meltano_util import MeltanoUtil
 from hub_utils.s3 import S3
@@ -81,18 +82,16 @@ class YamlLint(str, Enum):
 
 
 @app.command()
-def yamllint(action: YamlLint, path: str):
+def yamllint(action: YamlLint, paths: List[str]):
     """
     Run yamllint on all yamls in the hub or a specific path.
     """
-    if path:
-        paths = [path]
-    else:
+    if not paths:
         paths = list(find_all_yamls())
 
     for path in paths:
         if action == YamlLint.lint:
-            run_yamllint(path)
+            run_yamllint(path, error_if_fail=True)
         elif action == YamlLint.fix:
             fix_yaml(path)
 
