@@ -363,6 +363,34 @@ def test_sdk_about_parsing_default():
     ]
 
 
+def test_sdk_about_parsing_default_bool():
+    input = {
+        "settings": {
+            "type": "object",
+            "properties": {
+                "test": {
+                    "type": [
+                        "string"
+                    ],
+                    "default": False,
+                    "description": "my description"
+                }
+            },
+            "required": []
+        }
+    }
+    settings, _, _ = MeltanoUtil._parse_sdk_about_settings(input)
+    assert settings == [
+        {
+            "name": "test",
+            "label": "Test",
+            "description": "my description",
+            "kind": "string",
+            "value": False
+        }
+    ]
+
+
 def test_sdk_about_parsing_skip_default_dates():
     input = {
         "settings": {

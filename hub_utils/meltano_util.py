@@ -288,7 +288,7 @@ class MeltanoUtil:
             setting_details["kind"] = kind
             if options:
                 setting_details["options"] = options
-            if settings.get("default"):
+            if settings.get("default") is not None:
                 if kind != "date_iso8601":
                     setting_details["value"] = settings.get("default")
             reformatted_settings.append(setting_details)
