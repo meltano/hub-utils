@@ -365,7 +365,8 @@ class MeltanoUtil:
         for word in word_list:
             if len(word.split(".")) > 1:
                 if not any(
-                    keyword in word for keyword in ("http", "ssh", "ssl", "e.g.", '"', "`")
+                    keyword in word
+                    for keyword in ("http", "ssh", "ssl", "e.g.", '"', "`")
                 ):
                     desc_list_clean.extend(word.replace(".", ". ").split())
                     continue
