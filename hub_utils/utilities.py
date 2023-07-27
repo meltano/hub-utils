@@ -495,27 +495,6 @@ class Utilities:
         ]
 
     @staticmethod
-    def _clean_description(description):
-        # Split the description by periods and commas, and preserve them in the result
-        split_description = description.replace(".", ". ").replace(",", ", ").split()
-
-        # Capitalize the first word of each sentence
-        for i in range(len(split_description)):
-            if i == 0 or (
-                i > 0
-                and (
-                    split_description[i - 1].endswith(".")
-                    or split_description[i - 1].endswith(",")
-                )
-            ):
-                split_description[i] = split_description[i].capitalize()
-
-        # Join the cleaned description back into a single string
-        cleaned_description = " ".join(split_description)
-
-        return cleaned_description
-
-    @staticmethod
     def _merge_settings(existing_settings, settings):
         new_settings = []
         name_lookup = {setting.get("name"): setting for setting in settings}
@@ -533,7 +512,7 @@ class Utilities:
                 # then its probably a custom/manual override so keep it.
                 setting["description"] = existing_desc
             else:
-                setting["description"] = Utilities._clean_description(
+                setting["description"] = MeltanoUtil._clean_description(
                     setting["description"]
                 )
             # TODO: if existing is much longer we might want to keep it

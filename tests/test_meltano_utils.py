@@ -126,7 +126,7 @@ def test_sdk_about_parsing_airbyte():
 
     settings, settings_group_validation, capabilities = MeltanoUtil._parse_sdk_about_settings(sdk_about_dict)
     print(json.dumps(settings))
-    assert settings == [
+    expected_settings = [
         {
             "name": "airbyte_spec.image",
             "label": "Airbyte Spec Image",
@@ -156,7 +156,7 @@ def test_sdk_about_parsing_airbyte():
         {
             "name": "connector_config.format.filetype",
             "label": "Connector Config Format Filetype",
-            "description": "csv, parquet",
+            "description": "Csv, Parquet",
             "kind": "string"
         },
         {
@@ -242,6 +242,8 @@ def test_sdk_about_parsing_airbyte():
             "kind": "integer"
         }
     ]
+    for i, setting in enumerate(settings):
+        assert setting == expected_settings[i]
     assert set(settings_group_validation[0]) == set(
         [
             "airbyte_spec.image",
@@ -356,7 +358,7 @@ def test_sdk_about_parsing_default():
         {
             "name": "test",
             "label": "Test",
-            "description": "my description",
+            "description": "My description",
             "kind": "string",
             "value": "my default"
         }
@@ -384,7 +386,7 @@ def test_sdk_about_parsing_default_bool():
         {
             "name": "test",
             "label": "Test",
-            "description": "my description",
+            "description": "My description",
             "kind": "string",
             "value": False
         }
