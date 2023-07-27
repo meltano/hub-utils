@@ -227,7 +227,10 @@ class MeltanoUtil:
             if name in reformatted_settings_2:
                 existing_setting = reformatted_settings_2.get(name)
                 existing_setting["description"] = ", ".join(
-                    [existing_setting["description"], MeltanoUtil._clean_description(setting.get("description"))]
+                    [
+                        existing_setting["description"],
+                        MeltanoUtil._clean_description(setting.get("description")),
+                    ]
                 )
             else:
                 reformatted_settings_2[name] = setting
@@ -275,7 +278,7 @@ class MeltanoUtil:
             description = MeltanoUtil._handle_description(
                 MeltanoUtil._clean_description(settings.get("description")),
                 name,
-                enforce_desc
+                enforce_desc,
             )
             setting_details = {
                 "name": name,
@@ -317,7 +320,9 @@ class MeltanoUtil:
                     reqs = value.get("required", [])
                     field = {
                         "name": full_name,
-                        "description": MeltanoUtil._clean_description(subfield.get("description")),
+                        "description": MeltanoUtil._clean_description(
+                            subfield.get("description")
+                        ),
                         "default": subfield.get("default"),
                         "type": subfield.get("type"),
                         "title": subfield.get("title"),
@@ -336,7 +341,9 @@ class MeltanoUtil:
                 fields.append(
                     {
                         "name": key,
-                        "description": MeltanoUtil._clean_description(value.get("description")),
+                        "description": MeltanoUtil._clean_description(
+                            value.get("description")
+                        ),
                         "default": value.get("default"),
                         "type": value.get("type"),
                         "title": value.get("title"),
@@ -378,7 +385,9 @@ class MeltanoUtil:
         desc_list_clean = []
         for word in word_list:
             if len(word.split(".")) > 1:
-                if not any(keyword in word for keyword in ("http", "ssh", "ssl", "e.g.")):
+                if not any(
+                    keyword in word for keyword in ("http", "ssh", "ssl", "e.g.")
+                ):
                     desc_list_clean.extend(word.replace(".", ". ").split())
                     continue
             desc_list_clean.append(word)
@@ -398,12 +407,17 @@ class MeltanoUtil:
         for elem in capital_list:
             sentence_list = elem.split()
             last_elem = MeltanoUtil._last_element(clean_capital_list)
-            if sentence_list[0][0].isupper() or sentence_list[0][0] == "'" or last_elem.endswith('e.g') or last_elem.endswith('i.e'):
+            if (
+                sentence_list[0][0].isupper()
+                or sentence_list[0][0] == "'"
+                or last_elem.endswith("e.g")
+                or last_elem.endswith("i.e")
+            ):
                 clean_capital_list.append(" ".join(sentence_list))
             else:
                 sentence_list[0] = sentence_list[0].capitalize()
                 clean_capital_list.append(" ".join(sentence_list))
-            
+
         return ". ".join(clean_capital_list)
 
     @staticmethod
