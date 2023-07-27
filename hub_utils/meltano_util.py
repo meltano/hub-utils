@@ -359,34 +359,13 @@ class MeltanoUtil:
                 fields.append(i)
         return fields
 
-    # @staticmethod
-    # def _process_words(word_list, desc_list_clean, capitalize_next):
-    #     for word in word_list:
-    #         if capitalize_next:
-    #             word = word.capitalize()
-    #             capitalize_next = False
-    #         if "." in word:
-    #             # Its at the end
-    #             if word.endswith("."):
-    #                 # Add a space after
-    #                 word = word + " "
-    #                 # index + 1 capitalize
-    #                 capitalize_next = True
-    #                 desc_list_clean.append(word)
-    #             else:
-    #                 word_list = word.split(".")
-    #                 MeltanoUtil._process_words(word_list, desc_list_clean, False)
-    #         else:
-    #             desc_list_clean.append(word)
-    #     return desc_list_clean
-
     @staticmethod
     def _split_sentence_endings(word_list):
         desc_list_clean = []
         for word in word_list:
             if len(word.split(".")) > 1:
                 if not any(
-                    keyword in word for keyword in ("http", "ssh", "ssl", "e.g.")
+                    keyword in word for keyword in ("http", "ssh", "ssl", "e.g.", '"', "`")
                 ):
                     desc_list_clean.extend(word.replace(".", ". ").split())
                     continue
