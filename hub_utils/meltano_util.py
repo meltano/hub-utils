@@ -398,7 +398,7 @@ class MeltanoUtil:
         for elem in capital_list:
             sentence_list = elem.split()
             last_elem = MeltanoUtil._last_element(clean_capital_list)
-            if sentence_list[0][0].isupper() or last_elem.endswith('e.g') or last_elem.endswith('i.e'):
+            if sentence_list[0][0].isupper() or sentence_list[0][0] == "'" or last_elem.endswith('e.g') or last_elem.endswith('i.e'):
                 clean_capital_list.append(" ".join(sentence_list))
             else:
                 sentence_list[0] = sentence_list[0].capitalize()
@@ -416,46 +416,3 @@ class MeltanoUtil:
         cleaned_sentence = MeltanoUtil._split_sentence_endings(desc_list)
         cleaned_description = MeltanoUtil._capitalize(cleaned_sentence)
         return cleaned_description
-    
-        # desc_list_clean = [elem for elem in ]
-        description = description.replace(".", ". ")
-
-
-
-        # Upper case the first letter of the description in each sentence
-        description = MeltanoUtil._upper_case_first_letter(description)
-
-
-
-
-        # Split the description by periods and commas, and preserve them in the result
-        split_description = description.split()
-        split_description = [
-            elem.replace(".", ". ").replace(",", ", ")
-            if not any(keyword in elem for keyword in ("http", "ssh", "ssl", "e.g."))
-            else elem
-            for elem in split_description
-        ]
-        split_description = " ".join(split_description).split()
-
-        # Capitalize the first word of each sentence
-        for i in range(len(split_description)):
-            if i == 0 or (
-                i > 0
-                and (
-                    split_description[i - 1].endswith(".")
-                )
-            ):
-                if not split_description[i][0].isupper():
-                    split_description[i] = split_description[i].capitalize()
-
-        # Join the cleaned description back into a single string
-        cleaned_description = " ".join(split_description)
-
-        return cleaned_description
-
-
-if __name__ == "__main__":
-    MeltanoUtil()._clean_description("By providing a path-like prefix (e.g. myFolder/thisTable/) under which all the relevant files sit, we.")
-    # MeltanoUtil()._clean_description("a sentence.with bad punctuation.Starts here. with another sentence. Being poorly written. checkout this link <a href=\"https://json-schema.org/understanding-json-schema/reference/type.html\" target=\"_blank\">JSON Schema datatypes</a>.")
-    # MeltanoUtil()._clean_description("Optionally provide a schema to enforce, as a valid JSON string. Ensure this is a mapping of <strong>{ \"column\" : \"type\" }</strong>, where types are valid <a href=\"https://json-schema.org/understanding-json-schema/reference/type.html\" target=\"_blank\">JSON Schema datatypes</a>. Leave as {} to auto-infer the schema.")
