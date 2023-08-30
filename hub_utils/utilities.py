@@ -66,6 +66,7 @@ class Utilities:
 
     def get_variant_names(self, plugin_type, metadata_type):
         from hub_utils.yaml_lint import find_all_yamls
+
         formatted_output = []
         for yaml_file in find_all_yamls(f_path=f"{self.hub_root}/_data/meltano/"):
             data = self._read_yaml(yaml_file)
