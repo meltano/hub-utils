@@ -349,6 +349,7 @@ def download_metadata(
                 for i in util.get_variant_names(None, "sdk")
             ]
         )
+    print(variant_path_list)
     for yaml_file in variant_path_list.split(","):
         suffix = util.get_suffix(yaml_file)
         local_file_path = f"{local_path}/{suffix}.json"
