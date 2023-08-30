@@ -344,7 +344,7 @@ def download_metadata(
         variant_path_list = ",".join(SDK_SUFFIX_LIST)
     if all_sdk:
         variant_path_list = ",".join(
-            [i["plugin-name"] for i in util.get_variant_names(None, "sdk")]
+            [i["plugin-name"].split(".yml")[0] for i in util.get_variant_names(None, "sdk")]
         )
     for yaml_file in variant_path_list.split(","):
         suffix = util.get_suffix(yaml_file)
