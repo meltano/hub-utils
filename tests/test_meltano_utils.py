@@ -530,6 +530,14 @@ def test_get_quality(input, expected):
         ["Foo .env file.", "Foo .env file."],
         ["By (e.g. myFolder/thisTable/) sit, S3. This is replicate.", "By (e.g. myFolder/thisTable/) sit, S3. This is replicate."],
         [["foo.Test."], ""],
+        ["Request timeout used when not overridden in Session.execute().", "Request timeout used when not overridden in Session.execute()."],
+        ["For example, \"from:someuser@example.com rfc822msgid:<somemsgid@example.com> is:unread\".", "For example, \"from:someuser@example.com rfc822msgid:<somemsgid@example.com> is:unread\"."],
+        ["Subdomain (<subdomain>.gorgias.com) - required", "Subdomain (<subdomain>.gorgias.com) - required"],
+        ["Klaviyo API endpoint revision. https://developers.klaviyo.com/en/docs/api_versioning_and_deprecation_policy#versioning", "Klaviyo API endpoint revision. https://developers.klaviyo.com/en/docs/api_versioning_and_deprecation_policy#versioning"],
+        ["A more complex example against an Opensearch API, {\"bool\": {\"filter\": [{\"\range\": { \"meta.lastUpdated\": { \"gt\": \"$last_run_date\" }}}] }}. Note: Any", "A more complex example against an Opensearch API, {\"bool\": {\"filter\": [{\"\range\": { \"meta.lastUpdated\": { \"gt\": \"$last_run_date\" }}}] }}. Note: Any"],
+        ["tap-saasoptics <api_user_email@your_company.com>.", "tap-saasoptics <api_user_email@your_company.com>."],
+        ["the next 1000 records (offset: 1000…then 2000…etc.). Repeat paging", "the next 1000 records (offset: 1000…then 2000…etc.). Repeat paging"],
+        ["The Tradera.com developer app ID", "The Tradera.com developer app ID"],
     ]
 )
 def test_clean_description(input, expected):
