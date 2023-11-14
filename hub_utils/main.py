@@ -332,7 +332,7 @@ def download_metadata(
     local_path: str,
     variant_path_list: str = None,
     all_sdk: bool = True,
-    ignore_list_str: str = '',
+    ignore_list_str: str = "",
 ):
     """
     NOTE: USED FOR
