@@ -377,7 +377,16 @@ class MeltanoUtil:
                     continue
                 if not any(
                     keyword in word
-                    for keyword in ("http", "ssh", "ssl", "e.g.", '"', "`", "()", ".com")
+                    for keyword in (
+                        "http",
+                        "ssh",
+                        "ssl",
+                        "e.g.",
+                        '"',
+                        "`",
+                        "()",
+                        ".com",
+                    )
                 ):
                     desc_list_clean.extend(word.replace(".", ". ").split())
                     continue
