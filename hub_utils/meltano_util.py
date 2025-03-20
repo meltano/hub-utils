@@ -330,12 +330,16 @@ class MeltanoUtil:
 
         # Process top-level dependentRequired
         if "dependentRequired" in settings_raw:
-            for field, required_fields in settings_raw.get("dependentRequired", {}).items():
+            for field, required_fields in settings_raw.get(
+                "dependentRequired", {}
+            ).items():
                 if required_fields:
                     dependent_required_groups.append([field] + required_fields)
 
         # Process nested dependentRequired by traversing the schema again
-        MeltanoUtil._collect_nested_dependent_required(settings_raw, "", dependent_required_groups)
+        MeltanoUtil._collect_nested_dependent_required(
+            settings_raw, "", dependent_required_groups
+        )
 
         deduped_settings = MeltanoUtil._dedup_settings(reformatted_settings)
 
@@ -350,23 +354,32 @@ class MeltanoUtil:
         )
 
     @staticmethod
-    def _collect_nested_dependent_required(schema, parent_path, dependent_groups, field_sep="."):
+    def _collect_nested_dependent_required(
+        schema, parent_path, dependent_groups, field_sep="."
+    ):
         """Collect nested dependentRequired fields and add them to dependent_groups."""
         for key, value in schema.get("properties", {}).items():
             current_path = key if not parent_path else f"{parent_path}{field_sep}{key}"
 
             # Check if this object has dependentRequired
             if isinstance(value, dict) and "dependentRequired" in value:
-                for dep_field, dep_required_fields in value.get("dependentRequired", {}).items():
+                for dep_field, dep_required_fields in value.get(
+                    "dependentRequired", {}
+                ).items():
                     if dep_required_fields:
                         # Create full paths for dependent fields
                         full_path_field = f"{current_path}{field_sep}{dep_field}"
-                        full_path_required = [f"{current_path}{field_sep}{req}" for req in dep_required_fields]
+                        full_path_required = [
+                            f"{current_path}{field_sep}{req}"
+                            for req in dep_required_fields
+                        ]
                         dependent_groups.append([full_path_field] + full_path_required)
 
             # Recursively check nested objects
             if isinstance(value, dict) and "properties" in value:
-                MeltanoUtil._collect_nested_dependent_required(value, current_path, dependent_groups, field_sep)
+                MeltanoUtil._collect_nested_dependent_required(
+                    value, current_path, dependent_groups, field_sep
+                )
 
     @staticmethod
     def _traverse_schema_properties(schema, field_sep=".", parent_path=""):
