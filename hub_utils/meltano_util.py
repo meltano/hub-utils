@@ -293,6 +293,14 @@ class MeltanoUtil:
         reformatted_settings = []
         settings_group_validation = []
         base_required = settings_raw.get("required", [])
+
+        # Process dependent required fields
+        dependent_required_groups = []
+        if "dependentRequired" in settings_raw:
+            for field, required_fields in settings_raw.get("dependentRequired", {}).items():
+                if required_fields:
+                    dependent_required_groups.append([field, *required_fields])
+
         for settings in MeltanoUtil._traverse_schema_properties(settings_raw):
             name = settings.get("name")
             title = settings.get("title")
@@ -323,24 +331,29 @@ class MeltanoUtil:
             if settings.get("required"):
                 settings_group_validation.append(settings.get("name"))
         deduped_settings = MeltanoUtil._dedup_settings(reformatted_settings)
+
+        # Add base required fields and dependent required groups to settings_group_validation
+        validation_groups = [list(set(settings_group_validation + base_required))]
+        validation_groups.extend(dependent_required_groups)
+
         return (
             deduped_settings,
-            [list(set(settings_group_validation + base_required))],
+            [group for group in validation_groups if group],
             sdk_about_dict.get("capabilities"),
         )
 
     @staticmethod
-    def _traverse_schema_properties(schema, field_sep="."):
+    def _traverse_schema_properties(schema, field_sep=".", parent_path=""):
         fields = []
         for key, value in schema.get("properties", {}).items():
             val_type = value.get("type", "string")
+            reqs = value.get("required", [])
             if (val_type == "object" or "object" in val_type) and (
                 value.get("properties") or value.get("oneOf")
             ):
                 for subfield in MeltanoUtil._traverse_schema_properties(value):
                     sub_name = subfield.get("name")
                     full_name = f"{key}{field_sep}{sub_name}"
-                    reqs = value.get("required", [])
                     field = {
                         "name": full_name,
                         "description": MeltanoUtil._clean_description(
