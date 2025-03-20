@@ -282,6 +282,141 @@ def test_sdk_about_dependent_required():
     ]
 
 
+def test_sdk_about_dependent_required_nested():
+    sdk_about_dict = {
+        "name": "tap-example",
+        "description": "Singer.io tap for extracting data from example",
+        "version": "0.1.0",
+        "sdk_version": "0.40.0",
+        "capabilities": [
+            "catalog",
+            "state",
+            "discover",
+            "about",
+            "stream-maps",
+            "schema-flattening"
+        ],
+        "settings": {
+            "type": "object",
+            "properties": {
+                "cmo": {
+                    "description": "The client management organization to use when authenticating with the API",
+                    "title": "Client Management Organization",
+                    "type": [
+                        "string",
+                        "null"
+                    ],
+                },
+                "auth": {
+                    "type": "object",
+                    "properties": {
+                        "username": {
+                            "description": "The username to use when authenticating with the API",
+                            "title": "Username",
+                            "type": [
+                                "string",
+                                "null",
+                            ],
+                        },
+                        "password": {
+                            "description": "The password to use when authenticating with the API",
+                            "title": "Password",
+                            "type": [
+                                "string",
+                                "null"
+                            ],
+                            "secret": True,
+                            "writeOnly": True,
+                        },
+                        "client_id": {
+                            "description": "The client ID to use when authenticating with the API",
+                            "title": "Client ID",
+                            "type": [
+                                "string",
+                                "null",
+                            ],
+                        },
+                        "client_secret": {
+                            "description": "The client secret to use when authenticating with the API",
+                            "title": "Client Secret",
+                            "type": [
+                                "string",
+                                "null",
+                            ],
+                            "secret": True,
+                            "writeOnly": True,
+                        },
+                        "refresh_token": {
+                            "description": "The refresh token to use when authenticating with the API",
+                            "title": "Refresh Token",
+                            "type": [
+                                "string",
+                                "null"
+                            ],
+                            "secret": True,
+                            "writeOnly": True,
+                        },
+                    },
+                    "dependentRequired": {
+                        "username": ["password"],
+                        "client_id": ["client_secret", "refresh_token"]
+                    },
+                },
+            },
+        },
+    }
+
+    settings, settings_group_validation, _ = MeltanoUtil._parse_sdk_about_settings(sdk_about_dict)
+
+    assert settings == [
+        {
+            "name": "cmo",
+            "label": "Client Management Organization",
+            "description": "The client management organization to use when authenticating with the API",
+            "kind": "string"
+        },
+        {
+            "name": "auth.username",
+            "label": "Username",
+            "description": "The username to use when authenticating with the API",
+            "kind": "string"
+        },
+        {
+            "name": "auth.password",
+            "label": "Password",
+            "description": "The password to use when authenticating with the API",
+            "kind": "password",
+            "sensitive": True,
+        },
+        {
+            "name": "auth.client_id",
+            "label": "Client ID",
+            "description": "The client ID to use when authenticating with the API",
+            "kind": "password",
+            "sensitive": True,
+        },
+        {
+            "name": "auth.client_secret",
+            "label": "Client Secret",
+            "description": "The client secret to use when authenticating with the API",
+            "kind": "password",
+            "sensitive": True,
+        },
+        {
+            "name": "auth.refresh_token",
+            "label": "Refresh Token",
+            "description": "The refresh token to use when authenticating with the API",
+            "kind": "password",
+            "sensitive": True,
+        },
+    ]
+
+    assert settings_group_validation == [
+        ["auth.username", "auth.password"],
+        ["auth.client_id", "auth.client_secret", "auth.refresh_token"],
+    ]
+
+
 def test_sdk_about_parsing_airbyte():
     sdk_about_dict = _read_data('airbyte_s3_about.json')
 
