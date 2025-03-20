@@ -26,6 +26,9 @@ class MeltanoUtil:
         python: str | None = None,
     ):
         python_version = python or shutil.which("python")
+        if not python_version:
+            raise ValueError("Python not found in PATH")
+
         subprocess.run(
             shlex.split(f"pipx uninstall {plugin_name}"),
             stdout=subprocess.PIPE,
@@ -103,7 +106,7 @@ class MeltanoUtil:
         return maintainer
 
     @staticmethod
-    def _evaluate_official(is_sdk_based, usage_count, responsiveness) -> bool:
+    def _evaluate_official(is_sdk_based, usage_count, responsiveness) -> str:
         quality = "bronze"
         if is_sdk_based:
             quality = "gold"
@@ -112,7 +115,7 @@ class MeltanoUtil:
         return quality
 
     @staticmethod
-    def _evaluate_partner(is_sdk_based, usage_count, responsiveness) -> bool:
+    def _evaluate_partner(is_sdk_based, usage_count, responsiveness) -> str:
         quality = "bronze"
         if is_sdk_based:
             quality = "gold"
@@ -121,7 +124,7 @@ class MeltanoUtil:
         return quality
 
     @staticmethod
-    def _evaluate_community(variant, is_sdk_based, usage_count, responsiveness) -> bool:
+    def _evaluate_community(variant, is_sdk_based, usage_count, responsiveness) -> str:
         legacy_partners = ["singer-io", "airbyte", "transferwise"]
         quality = "unknown"
         if is_sdk_based and usage_count >= 6 and responsiveness != "low":
@@ -289,6 +292,15 @@ class MeltanoUtil:
 
     @staticmethod
     def _parse_sdk_about_settings(sdk_about_dict, enforce_desc=False):
+        """Parse SDK about settings into a format suitable for Meltano.
+
+        Args:
+            sdk_about_dict: Dictionary containing SDK about information
+            enforce_desc: Whether to enforce descriptions for settings
+
+        Returns:
+            Tuple of (settings, validation_groups, capabilities)
+        """
         settings_raw = sdk_about_dict.get("settings", {})
         reformatted_settings = []
         settings_group_validation = []
