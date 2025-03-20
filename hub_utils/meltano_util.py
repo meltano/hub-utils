@@ -76,9 +76,7 @@ class MeltanoUtil:
                 json.dump(config, tmp)
                 tmp.flush()
                 about_content = subprocess.run(
-                    f"{plugin_name} --about --format=json --config {tmp.name}".split(
-                        " "
-                    ),
+                    f"{plugin_name} --about --format=json --config {tmp.name}".split(" "),
                     stdout=subprocess.PIPE,
                     text=True,
                     check=True,
@@ -145,25 +143,17 @@ class MeltanoUtil:
     def get_quality(variant, is_sdk_based, usage_count, responsiveness):
         maintainer = MeltanoUtil._get_maintainer(variant)
         if maintainer == "official":
-            quality = MeltanoUtil._evaluate_official(
-                is_sdk_based, usage_count, responsiveness
-            )
+            quality = MeltanoUtil._evaluate_official(is_sdk_based, usage_count, responsiveness)
         elif maintainer == "partner":
-            quality = MeltanoUtil._evaluate_partner(
-                is_sdk_based, usage_count, responsiveness
-            )
+            quality = MeltanoUtil._evaluate_partner(is_sdk_based, usage_count, responsiveness)
         elif maintainer == "community":
-            quality = MeltanoUtil._evaluate_community(
-                variant, is_sdk_based, usage_count, responsiveness
-            )
+            quality = MeltanoUtil._evaluate_community(variant, is_sdk_based, usage_count, responsiveness)
         return quality
 
     @staticmethod
     def _get_label(name):
         new_label = []
-        for label_word in (
-            name.replace("_", " ").replace("-", " ").replace(".", " ").split(" ")
-        ):
+        for label_word in name.replace("_", " ").replace("-", " ").replace(".", " ").split(" "):
             label_word = label_word.title()
             new_label.append(
                 label_word.replace("Aws", "AWS")
@@ -188,18 +178,12 @@ class MeltanoUtil:
             if format in ("date-time", "date") or setting in ("start_date", "end_date"):
                 return "date_iso8601", None
             if (
-                any(
-                    id_str.lower() in setting
-                    for id_str in ["password", "id", "token", "key", "secret"]
-                )
+                any(id_str.lower() in setting for id_str in ["password", "id", "token", "key", "secret"])
                 or format == "airbyte_secret"
             ):
                 return "password", None
             if allowed_values := settings.get("enum"):
-                option_parsed = [
-                    {"label": MeltanoUtil._get_label(val), "value": val}
-                    for val in allowed_values
-                ]
+                option_parsed = [{"label": MeltanoUtil._get_label(val), "value": val} for val in allowed_values]
                 return "options", option_parsed
             return "string", None
         if kind == "number":
@@ -323,9 +307,7 @@ class MeltanoUtil:
                 "label": title or MeltanoUtil._get_label(name),
                 "description": description,
             }
-            kind = MeltanoUtil._get_kind_from_type(
-                settings.get("type"), name, enforce_desc
-            )
+            kind = MeltanoUtil._get_kind_from_type(settings.get("type"), name, enforce_desc)
 
             kind, options = MeltanoUtil._parse_kind(kind, settings)
             setting_details["kind"] = kind
@@ -342,16 +324,12 @@ class MeltanoUtil:
 
         # Process top-level dependentRequired
         if "dependentRequired" in settings_raw:
-            for field, required_fields in settings_raw.get(
-                "dependentRequired", {}
-            ).items():
+            for field, required_fields in settings_raw.get("dependentRequired", {}).items():
                 if required_fields:
-                    dependent_required_groups.append([field] + required_fields)
+                    dependent_required_groups.append([field, *required_fields])
 
         # Process nested dependentRequired by traversing the schema again
-        MeltanoUtil._collect_nested_dependent_required(
-            settings_raw, "", dependent_required_groups
-        )
+        MeltanoUtil._collect_nested_dependent_required(settings_raw, "", dependent_required_groups)
 
         deduped_settings = MeltanoUtil._dedup_settings(reformatted_settings)
 
@@ -366,32 +344,23 @@ class MeltanoUtil:
         )
 
     @staticmethod
-    def _collect_nested_dependent_required(
-        schema, parent_path, dependent_groups, field_sep="."
-    ):
+    def _collect_nested_dependent_required(schema, parent_path, dependent_groups, field_sep="."):
         """Collect nested dependentRequired fields and add them to dependent_groups."""
         for key, value in schema.get("properties", {}).items():
             current_path = key if not parent_path else f"{parent_path}{field_sep}{key}"
 
             # Check if this object has dependentRequired
             if isinstance(value, dict) and "dependentRequired" in value:
-                for dep_field, dep_required_fields in value.get(
-                    "dependentRequired", {}
-                ).items():
+                for dep_field, dep_required_fields in value.get("dependentRequired", {}).items():
                     if dep_required_fields:
                         # Create full paths for dependent fields
                         full_path_field = f"{current_path}{field_sep}{dep_field}"
-                        full_path_required = [
-                            f"{current_path}{field_sep}{req}"
-                            for req in dep_required_fields
-                        ]
-                        dependent_groups.append([full_path_field] + full_path_required)
+                        full_path_required = [f"{current_path}{field_sep}{req}" for req in dep_required_fields]
+                        dependent_groups.append([full_path_field, *full_path_required])
 
             # Recursively check nested objects
             if isinstance(value, dict) and "properties" in value:
-                MeltanoUtil._collect_nested_dependent_required(
-                    value, current_path, dependent_groups, field_sep
-                )
+                MeltanoUtil._collect_nested_dependent_required(value, current_path, dependent_groups, field_sep)
 
     @staticmethod
     def _traverse_schema_properties(schema, field_sep=".", parent_path=""):
@@ -399,17 +368,13 @@ class MeltanoUtil:
         for key, value in schema.get("properties", {}).items():
             val_type = value.get("type", "string")
             reqs = value.get("required", [])
-            if (val_type == "object" or "object" in val_type) and (
-                value.get("properties") or value.get("oneOf")
-            ):
+            if (val_type == "object" or "object" in val_type) and (value.get("properties") or value.get("oneOf")):
                 for subfield in MeltanoUtil._traverse_schema_properties(value):
                     sub_name = subfield.get("name")
                     full_name = f"{key}{field_sep}{sub_name}"
                     field = {
                         "name": full_name,
-                        "description": MeltanoUtil._clean_description(
-                            subfield.get("description")
-                        ),
+                        "description": MeltanoUtil._clean_description(subfield.get("description")),
                         "default": subfield.get("default"),
                         "type": subfield.get("type"),
                         "title": subfield.get("title"),
@@ -428,9 +393,7 @@ class MeltanoUtil:
                 fields.append(
                     {
                         "name": key,
-                        "description": MeltanoUtil._clean_description(
-                            value.get("description")
-                        ),
+                        "description": MeltanoUtil._clean_description(value.get("description")),
                         "default": value.get("default"),
                         "type": value.get("type"),
                         "title": value.get("title"),
@@ -454,11 +417,7 @@ class MeltanoUtil:
                 desc_list_clean.append(word)
                 continue
             elif len(word.split(".")) > 1 and not word.startswith("."):
-                if (
-                    word.split(".")[0][-1].isnumeric()
-                    and word.split(".")[1]
-                    and word.split(".")[1][0].isnumeric()
-                ):
+                if word.split(".")[0][-1].isnumeric() and word.split(".")[1] and word.split(".")[1][0].isnumeric():
                     # its numeric
                     desc_list_clean.append(word)
                     continue
